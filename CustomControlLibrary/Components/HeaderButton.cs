@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace CustomControl.Components
+namespace CustomControlLibrary.Components
 {
     [TemplatePart(Name = "img", Type = typeof(Image))]
     public class HeaderButton : UserControl

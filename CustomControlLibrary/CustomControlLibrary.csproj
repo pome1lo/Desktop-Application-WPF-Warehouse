@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\BrowseFile.png" />
+    <None Remove="Images\clear.png" />
+    <None Remove="Images\eye.png" />
+    <None Remove="Images\folderExplore.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\BrowseFile.png" />
+    <Resource Include="Images\clear.png" />
+    <Resource Include="Images\eye.png" />
+    <Resource Include="Images\folderExplore.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+</Project>

@@ -21,4 +21,8 @@
     <v:String x:Key="product_price">Цена товара</v:String>
     <v:String x:Key="product_picture">Изображение</v:String>
     <v:String x:Key="product_add">Добавить товар</v:String>
+    <v:String x:Key="description">Описание товара</v:String>
+    <v:String x:Key="about">О товаре</v:String>
+    <v:String x:Key="card">В корзину</v:String>
+    <v:String x:Key="add_card">Добавь в корзину</v:String>
 </ResourceDictionary>

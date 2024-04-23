@@ -47,7 +47,7 @@ namespace DataValidation
                     errorMessage = "Incorrect data";
                     break;
                 case ValidationBased.OrdinaryDigits:
-                    regex = @"^[1-9]\d{0,2}$";
+                    regex = @"^\d+$";//@"^[1-9]\d{0,2}$";
                     errorMessage = "Incorrect data";
                     break;
                 case ValidationBased.Links:

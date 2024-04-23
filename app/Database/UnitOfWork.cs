@@ -9,9 +9,10 @@ namespace app.Database
 {
     internal class UnitOfWork : IDisposable
     {
-        private ApplicationContext db = ApplicationContext.GetContext();
+        private ApplicationContext db = new ApplicationContext();
 
         private UserRepository? userRepository;
+        private ProductRepository? productRepository;
 
         public UserRepository Users
         {
@@ -24,7 +25,17 @@ namespace app.Database
                 return userRepository;
             }
         }
-
+        public ProductRepository Products
+        {
+            get
+            {
+                if (productRepository == null)
+                {
+                    productRepository = new ProductRepository();
+                }
+                return productRepository;
+            }
+        }
 
         public void Save()
         { 

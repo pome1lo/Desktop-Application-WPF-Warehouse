@@ -37,6 +37,14 @@ namespace app.ViewModels
             view.Show();
         }
 
+        protected static void ShowProductInfoPage(Product? product)
+        {
+            ProductInfoView view = new ProductInfoView();
+            ProductInfoViewModel viewModel = new ProductInfoViewModel(product);
+            view.DataContext = viewModel;
+            ShowPage(view);
+        }
+
         protected static void ShowPage(Page page) => MainFrame.Content = page;
         protected static void SendToModalWindow(string content) => new ModalWindow(content).ShowDialog();
     }

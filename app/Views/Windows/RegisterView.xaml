@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:app.Views.Windows"
         mc:Ignorable="d"
         Name="view"
-        xmlns:vm="clr-namespace:app.ViewModels" xmlns:components="clr-namespace:CustomControl.Components;assembly=CustomControl"
+        xmlns:vm="clr-namespace:app.ViewModels" xmlns:components="clr-namespace:CustomControlLibrary.Components;assembly=CustomControlLibrary"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Title="RegisterView" Height="590" Width="300">

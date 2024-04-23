@@ -1,0 +1,139 @@
+﻿<Page x:Class="app.Views.Pages.MenuView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:vm="clr-namespace:app.ViewModels"
+      xmlns:local="clr-namespace:app.Views.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MenuView">
+    <Page.DataContext>
+        <vm:MenuViewModel/>
+    </Page.DataContext>
+    <Border Margin="0 80 0 0" Padding="20 0 20 0">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/> 
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
+            <!--<StackPanel.Resources>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </StackPanel.Resources>-->
+
+
+
+            <TextBox Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+            <!--<StackPanel Orientation="Horizontal">
+                <custom:InputBox TextName="{DynamicResource Menu_From}" Width="90"
+                                 TextInput="{Binding RangeFrom, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 ErrorMessage="{Binding ErrorRangeFrom, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <custom:InputBox TextName="{DynamicResource Menu_To}" Width="90"
+                                 TextInput="{Binding RangeTo, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 ErrorMessage="{Binding ErrorRangeTo, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>-->
+
+            <TextBlock Text="{DynamicResource Menu_Calories}" Margin="5"/>
+            <Slider Value="{Binding SliderValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                    TickFrequency="1" Maximum="500" Minimum="130" >
+            </Slider>
+
+                <!--<StackPanel Margin="5"> Style="{StaticResource MaterialDesignDiscreteSlider}"
+                <StackPanel.Resources>
+                    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                </StackPanel.Resources>
+                <TextBlock Text="{DynamicResource Menu_ProductType}"/>
+                <RadioButton Margin="0 8 0 5" Content="{DynamicResource Menu_Drinks}"
+                                             Command="{Binding CheckedTypeCommand}"
+                                             CommandParameter="{x:Static loc:ProdType.Refreashes}"
+                                             Background="#FFFADF5A"/>
+                <RadioButton Margin="0 5 0 5" Content="{DynamicResource Menu_Meal}"
+                                             Background="#FFFADF5A"
+                                             Command="{Binding CheckedTypeCommand}"
+                                             CommandParameter="{x:Static loc:ProdType.Meal}"/>
+                <RadioButton Margin="0 5 0 5" Content="{DynamicResource Menu_Coffee}"
+                                             Command="{Binding CheckedTypeCommand}"
+                                             Background="#FFFADF5A"
+                                             CommandParameter="{x:Static loc:ProdType.Coffee}"/>
+
+
+            </StackPanel>-->
+            <!--<Button Content="{DynamicResource Menu_Find}" 
+                    Command="{Binding FindButtonCommand}"
+                    Style="{StaticResource ButtonBlack}"
+                    Width="150"/>
+            <Button Content="{DynamicResource Menu_Reset}" 
+                    Command="{Binding ResetButtonCommand}"
+                    Style="{StaticResource ButtonBlack}"
+                    Width="150"/>-->
+        </StackPanel>
+
+        <ListView ItemsSource="{Binding Products, UpdateSourceTrigger=PropertyChanged}" 
+                  Grid.Column="1"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  HorizontalContentAlignment="Center"
+                  ScrollViewer.CanContentScroll="False" 
+                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                  Background="Transparent" BorderBrush="Transparent"
+                  SelectedItem="{Binding SelectedItemForListProducts, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard >
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Style.Triggers>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border>
+                                    <Border.InputBindings>
+                                        <MouseBinding MouseAction="{x:Static MouseAction.LeftClick}"
+                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.SelectedItemForListProducts}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=SelectedItem}"/>
+                                    </Border.InputBindings>
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="1"  Margin="10" Padding="15">
+                        <StackPanel Orientation="Vertical">
+                            <Image Stretch="Fill" Source="{Binding Image}" Width="120"/>
+                            <TextBlock Text="{Binding ProductName}" Width="100" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap" Margin="2"/>
+                                <TextBlock Text="{Binding Price, StringFormat={}{0:C2}}" Width="100" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap" Margin="2"/>
+                            <DockPanel>
+                                <Button Style="{DynamicResource customButtonOrange}" DockPanel.Dock="Left"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType ={x:Type ListView}}, Path=DataContext.AddToBasketCommand}"
+                                    CommandParameter="{Binding}" Content="{DynamicResource about}" Margin="5"/>
+                                <Button  Style="{DynamicResource customButtonOrange}" DockPanel.Dock="Right"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType ={x:Type ListView}}, Path=DataContext.AddToBasketCommand}"
+                                    CommandParameter="{Binding}" Content="{DynamicResource card}" Margin="5"/>
+
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        </Grid>
+    </Border>
+</Page>

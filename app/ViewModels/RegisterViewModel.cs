@@ -128,6 +128,7 @@ namespace app.ViewModels
 
         private void GoToTheMainPage(Window view)
         {
+            ViewModelBase.CurrentUser = users.Find(x => x.Username == RegisteredUser.Username);
             ShowMainWindow();
             view?.Close();
         }
@@ -154,9 +155,7 @@ namespace app.ViewModels
                 {
                     registerCommand = new DelegateCommand<RegisterView>((RegisterView obj) =>
                     {
-                        //SendToModalWindow("A user with this name already exists.");
-                        var test = IsTheUserDataCorrect();
-                        if (test)
+                        if (IsTheUserDataCorrect())
                         {
                             if (!users.Any(x => x.Username == RegisteredUser.Username))
                             {
@@ -164,9 +163,25 @@ namespace app.ViewModels
                                 ///user.Notifications = new() { GetDefaultNotification() };
 
                                 ///new Task(SendMailMessage).Start();
-                                 
-                                Db.Users.Create(RegisteredUser);
-                                Db?.Save();
+
+                                //Db.Users.Create(new User()
+                                //{
+                                //    Username = RegisteredUser.Username,
+                                //    FIO = RegisteredUser.FIO,
+                                //    Theme = "Light",
+                                //    Language = ".ru-RU",
+                                //    Email = RegisteredUser.Email,
+                                //    IsAdmin = false,
+                                //    Password = RegisteredUser.Password,
+                                //    ProductsFromBasket = RegisteredUser.ProductsFromBasket,
+                                //});
+
+                                var db = new ApplicationContext();
+                                db.Users.Add(RegisteredUser);
+                                db.SaveChanges();
+
+                                //Db.Users.Create(RegisteredUser);
+                                //Db.Save();
                                 GoToTheMainPage(obj);
                             }
                             else

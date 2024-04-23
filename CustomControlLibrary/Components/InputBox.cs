@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 
-namespace CustomControl.Components
+namespace CustomControlLibrary.Components
 {
     [TemplatePart(Name = "textBox", Type = typeof(TextBox))]
     [TemplatePart(Name = "textBlock", Type = typeof(TextBlock))]
@@ -20,7 +20,7 @@ namespace CustomControl.Components
             get { return (string)GetValue(TextNameProperty); }
             set { SetValue(TextNameProperty, value); }
         }
-
+          
         public new string TextInput
         {
             get { return (string)GetValue(TextInputProperty); }
@@ -48,7 +48,7 @@ namespace CustomControl.Components
               new PropertyMetadata(string.Empty));
 
         #endregion
-
+          
         #endregion
 
         #region Fields
@@ -104,7 +104,7 @@ namespace CustomControl.Components
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextInput = textBox.Text;
-        }
+        } 
 
         #endregion
     }

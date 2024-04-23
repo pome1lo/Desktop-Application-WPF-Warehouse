@@ -1,8 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace CustomControl.Components
+namespace CustomControlLibrary.Components
 {
+
     [TemplatePart(Name = "passwordBox", Type = typeof(PasswordBox))]
     public partial class BindablePasswordBox : UserControl
     {
@@ -16,13 +17,11 @@ namespace CustomControl.Components
                 SetValue(PasswordProperty, value);
             }
         }
-
         #region Dependecy Property
 
         public static readonly DependencyProperty PasswordProperty =
             DependencyProperty.Register("Password", typeof(string), typeof(BindablePasswordBox),
                 new PropertyMetadata(string.Empty));
-
 
         #endregion
 

@@ -20,9 +20,11 @@ namespace app.ViewModels
             Db = new UnitOfWork();
             ChangeTheme(CurrentUser.Theme);
             ChangeLanguage(CurrentUser.Language);
+            ConfiguringApplicationForUserType();
             ShowPage(new HomeView());
         }
 
+        private Visibility visibilityAdminButton = Visibility.Collapsed;
         private bool isThemeFirstImage = true;
         private bool isLangFirstImage = true;
         private UnitOfWork Db;
@@ -34,6 +36,7 @@ namespace app.ViewModels
         private DelegateCommand? showMenuCommand;
         private DelegateCommand<object> exitAccountCommand;
         private DelegateCommand? exitCommand;
+        private DelegateCommand? showAdminCommand;
         private DelegateCommand? showProfileCommand;
         private DelegateCommand? showMapCommand;
         private DelegateCommand? showAboutCommand;
@@ -42,6 +45,15 @@ namespace app.ViewModels
         private DelegateCommand toggleImageThemeCommand;
         private Brush colorHeaderButton;
 
+        public Visibility VisibilityAdminButton
+        {
+            get => visibilityAdminButton;
+            set
+            {
+                visibilityAdminButton = value;
+                OnPropertyChanged(nameof(VisibilityAdminButton));
+            }
+        }
 
         public Brush ColorHeaderButton
         {
@@ -74,6 +86,19 @@ namespace app.ViewModels
                 currentLangImage = value;
                 OnPropertyChanged(nameof(CurrentLangImage));
             }
+        }
+
+        private void ConfiguringApplicationForUserType()
+        {
+            if (CurrentUser.IsAdmin)
+            {
+                SettingUpForAdmin();
+            }
+        }
+        
+        private void SettingUpForAdmin()
+        {
+            VisibilityAdminButton = Visibility.Visible;
         }
 
         private void ChangeLanguage(string Language)
@@ -123,6 +148,20 @@ namespace app.ViewModels
             }
         }
 
+        public ICommand ShowAdminCommand
+        {
+            get
+            {
+                if (showAdminCommand == null)
+                {
+                    showAdminCommand = new DelegateCommand(() =>
+                    {
+                        ShowPage(new NewProduct());
+                    });
+                }
+                return showAdminCommand;
+            }
+        }
 
         public ICommand ExitCommand
         {
@@ -150,6 +189,21 @@ namespace app.ViewModels
                     });
                 }
                 return showHomeCommand;
+            }
+        }
+
+        public ICommand ShowMenuCommand
+        {
+            get
+            {
+                if (showMenuCommand == null)
+                {
+                    showMenuCommand = new DelegateCommand(() =>
+                    {
+                        ShowPage(new MenuView());
+                    });
+                }
+                return showMenuCommand;
             }
         }
 
@@ -219,6 +273,6 @@ namespace app.ViewModels
                 }
                 return toggleImageLangCommand;
             }
-        }
+        } 
     }
 }

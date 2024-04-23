@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:app.ViewModels"
-        xmlns:local="clr-namespace:app.Views.Windows" xmlns:custom="clr-namespace:CustomControl.Components;assembly=CustomControl"
-        mc:Ignorable="d" 
+        xmlns:local="clr-namespace:app.Views.Windows"
+        mc:Ignorable="d" Name="view"
         WindowStyle="None"
-        Title="MainView" Height="450" Width="800">
+        Title="MainView" Height="500" Width="900">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
@@ -35,12 +35,13 @@
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                          
                         <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Button Command="{Binding YourCommand1}" Content="📖"
+                            <Button Command="{Binding ShowAdminCommand}" Content="⚙️" 
+                                    Visibility="{Binding VisibilityAdminButton}"
                                     Style="{DynamicResource customButtonHeader}"
                                     Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </Border>
                         <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Button Command="{Binding YourCommand2}" Content="⚙️" 
+                            <Button Command="{Binding ShowMenuCommand}" Content="📖"
                                     Style="{DynamicResource customButtonHeader}"
                                     Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </Border>
@@ -50,7 +51,8 @@
                                     Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </Border>
                         <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Button Command="{Binding YourCommand4}" Content="➡️"
+                            <Button Command="{Binding ExitAccountCommand}" Content="➡️"
+                                    CommandParameter="{Binding ElementName=view}"
                                     Style="{DynamicResource customButtonHeader}"
                                     Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </Border>

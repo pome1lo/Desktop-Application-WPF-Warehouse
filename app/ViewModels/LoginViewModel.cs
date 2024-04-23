@@ -1,4 +1,5 @@
 ﻿using app.Commands;
+using app.Database;
 using app.Models;
 using app.Views.Windows;
 using DataEncryption;
@@ -18,12 +19,17 @@ namespace app.ViewModels
     {
         public LoginViewModel()
         {
+            this.Db = new UnitOfWork();
             this.validator = new Validator(this);
+            this.users = Db?.Users.GetIEnumerable().ToList();
         }
 
+        private UnitOfWork Db;
         private Validator validator;
-        private List<User> users { get; set; } = new();
-        private User user = new();
+        private List<User> users { get; set; }
+
+        private string username = string.Empty;
+        private string password = string.Empty;
 
         private string errorPasswordMessage = string.Empty;
         private string errorUserNameMessage = string.Empty;
@@ -35,33 +41,24 @@ namespace app.ViewModels
 
         public string Password
         {
-            get => user.Password;
+            get => password;
             set
             {
-                user.Password = value;
+                password = value;
                 OnPropertyChanged(nameof(Password));
             }
         }
 
         public string UserName
         {
-            get => user.Username;
+            get => username;
             set
             {
-                user.Username = value;
+                username = value;
                 OnPropertyChanged(nameof(UserName));
             }
         }
-
-        public string Email
-        {
-            get => user.Email;
-            set
-            {
-                user.Email = value;
-                OnPropertyChanged(nameof(Email));
-            }
-        }
+         
 
         #region Errors
 
@@ -101,6 +98,7 @@ namespace app.ViewModels
 
         private void GoToTheMainPage(Window view)
         {
+            ViewModelBase.CurrentUser = users.Find(x => x.Username == UserName);
             ShowMainWindow();
             view?.Close();
         }
@@ -122,11 +120,10 @@ namespace app.ViewModels
                 if (logInCommand == null)
                 {
                     logInCommand = new DelegateCommand<Window>((Window obj) =>
-                    {
-                        //GoToTheMainPage(obj);
+                    { 
                         if (IsTheUserDataCorrect())
                         {
-                            if (users.Any(x => x.Username == user.Username && CryptographerBuilder.Decrypt(x.Password) == user.Password))
+                            if (users.Any(x => x.Username == UserName && CryptographerBuilder.Decrypt(x.Password) == Password))
                             {
                                 GoToTheMainPage(obj);
                             }

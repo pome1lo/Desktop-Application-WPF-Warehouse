@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:app.Views.Windows"
         mc:Ignorable="d" 
-        xmlns:vm="clr-namespace:app.ViewModels" xmlns:components="clr-namespace:CustomControl.Components;assembly=CustomControl"
+        xmlns:vm="clr-namespace:app.ViewModels" xmlns:components="clr-namespace:CustomControlLibrary.Components;assembly=CustomControlLibrary"
         ResizeMode="NoResize"
         Name="view"
         WindowStartupLocation="CenterScreen"
@@ -84,8 +84,9 @@
 
                 <TextBlock Margin="5 0 0 5" Text="{DynamicResource ResourceKey=username}"/>
                 <TextBox Style="{DynamicResource ResourceKey=customInput}"
+                     Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                      Padding="7 5 0 0"/>
-                <TextBlock Text="{Binding ErrorPasswordMessage}"
+                <TextBlock Text="{Binding ErrorPasswordMessage, UpdateSourceTrigger=PropertyChanged}"
                        Foreground="#D7596D"
                        FontSize="12"
                        FontWeight="Medium"
@@ -98,7 +99,7 @@
                 <components:BindablePasswordBox
                 Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                 />
-                <TextBlock x:Name="textBlock4" Text="{Binding ErrorPasswordMessage}"
+                <TextBlock x:Name="textBlock4" Text="{Binding ErrorPasswordMessage, UpdateSourceTrigger=PropertyChanged}"
                                Foreground="#D7596D"
                                FontSize="12"
                                FontWeight="Medium"

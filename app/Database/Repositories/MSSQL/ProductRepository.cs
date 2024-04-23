@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace app.Database.Repositories.MSSQL
 {
-    internal class UserRepository : IRepository<User>
+    internal class ProductRepository : IRepository<Product>
     {
         private ApplicationContext db { get; set; }
 
         #region Constructor 
 
-        public UserRepository()
+        public ProductRepository()
         {
             this.db = new ApplicationContext();
         }
@@ -23,31 +23,38 @@ namespace app.Database.Repositories.MSSQL
 
         #region Methods
 
-        public IEnumerable<User> GetIEnumerable()
+        public IEnumerable<Product> GetIEnumerable()
         {
-            return db.Users.Include(x => x.ProductsFromBasket);
-        }
-        public User? Get(int id)
-        {
-            return GetIEnumerable().ToList().Find(x => x.Id == id);
-        }
-        public void Create(User user)
-        {
-            db.Users.Add(user);
+            //IEnumerable<Product> products = db.Products;
+
+            //products.ToList().ForEach(x => x.Description = db.Descriptions.ToArray()[x.Id - 1]);
+
+            return db.Products;
         }
 
-        public void Update(User user)
+        public void Update(Product product)
         {
-            db.Entry(user).State = EntityState.Modified;
+            db.Entry(product).State = EntityState.Modified;
+        }
+
+        public Product? Get(int id)
+        {
+            return db.Products.Find(id);
+        }
+
+        public void Create(Product product)
+        {
+            //product.Id = db.Products.Last().Id + 1;
+            db.Products.Add(product);
         }
 
         public void Delete(int id)
         {
-            User? user = db.Users.Find(id);
+            Product? product = db.Products.Find(id);
 
-            if (user != null)
+            if (product != null)
             {
-                db.Users.Remove(user);
+                db.Products.Remove(product);
             }
         }
 
