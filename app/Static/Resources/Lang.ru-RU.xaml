@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:v="clr-namespace:System;assembly=mscorlib">
+    <v:String x:Key="login">Вход</v:String>
+    <v:String x:Key="username">Логин</v:String>
+    <v:String x:Key="password">Пароль</v:String>
+    <v:String x:Key="fio">ФИО</v:String>
+    <v:String x:Key="Confirm">Повторите пароль</v:String>
+    <v:String x:Key="Email">Email</v:String>
+    <v:String x:Key="login_button">Войти</v:String>
+    <v:String x:Key="yes">Да</v:String>
+    <v:String x:Key="no">Нет</v:String>
+    <v:String x:Key="register_button">Регистрация</v:String>
+    <v:String x:Key="account">Аккаунт</v:String>
+    <v:String x:Key="change_account_data">Изменить данные аккаунта</v:String>
+    <v:String x:Key="orders">Ваши заказы</v:String>
+    <v:String x:Key="add_product">Добавление товара</v:String>
+    <v:String x:Key="product_name">Название товара</v:String>
+    <v:String x:Key="product_desc">Описание товара</v:String>
+    <v:String x:Key="product_category">Категория товара</v:String>
+    <v:String x:Key="product_price">Цена товара</v:String>
+    <v:String x:Key="product_picture">Изображение</v:String>
+    <v:String x:Key="product_add">Добавить товар</v:String>
+</ResourceDictionary>
