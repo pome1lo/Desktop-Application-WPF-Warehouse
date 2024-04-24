@@ -4,9 +4,12 @@ using app.Models;
 using DataValidation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using static DataValidation.Validator;
 
@@ -18,11 +21,12 @@ namespace app.ViewModels
         {
             this.Db = new UnitOfWork();
             validator = new Validator(this);
+            selectedCategories = new List<string>();
             Products = Db.Products.GetIEnumerable().ToList();
+            VisibilityEditProductButton = CurrentUser.IsAdmin ? Visibility.Visible : Visibility.Collapsed;
         }
-
-        private string categoryItem = string.Empty;
-
+         
+        private List<string> selectedCategories; 
         private UnitOfWork Db;
         private List<Product>? products;
         private Product? selectedItemForListProducts;
@@ -36,9 +40,13 @@ namespace app.ViewModels
         private string rangeTo = string.Empty;
         private int sliderValue = -1;
 
+        private Visibility visibilityEditProductButton = Visibility.Collapsed;
+
         private DelegateCommand? findButtonCommand;
         private DelegateCommand? resetButtonCommand;
         private DelegateCommand<object>? addToBasketCommand;
+        private DelegateCommand<object>? checkBoxCommand;
+        private DelegateCommand<Product>? editProductCommand;
 
         #region Main List Product
 
@@ -54,6 +62,61 @@ namespace app.ViewModels
 
         #endregion
 
+        #region ToggleButtons
+
+        public bool isCheckedToggleButton1;
+        public bool IsCheckedToggleButton1
+        {
+            get => isCheckedToggleButton1;
+            set
+            {
+                isCheckedToggleButton1 = value;
+                OnPropertyChanged(nameof(IsCheckedToggleButton1));
+            }
+        }
+        public bool isCheckedToggleButton2;
+        public bool IsCheckedToggleButton2
+        {
+            get => isCheckedToggleButton2;
+            set
+            {
+                isCheckedToggleButton2 = value;
+                OnPropertyChanged(nameof(IsCheckedToggleButton2));
+            }
+        }
+        public bool isCheckedToggleButton3;
+        public bool IsCheckedToggleButton3
+        {
+            get => isCheckedToggleButton3;
+            set
+            {
+                isCheckedToggleButton3 = value;
+                OnPropertyChanged(nameof(IsCheckedToggleButton3));
+            }
+        }
+        public bool isCheckedToggleButton4;
+        public bool IsCheckedToggleButton4
+        {
+            get => isCheckedToggleButton4;
+            set
+            {
+                isCheckedToggleButton4 = value;
+                OnPropertyChanged(nameof(IsCheckedToggleButton4));
+            }
+        }
+
+        #endregion
+
+        public Visibility VisibilityEditProductButton
+        {
+            get => visibilityEditProductButton;
+            set
+            {
+                visibilityEditProductButton = value; 
+                OnPropertyChanged(nameof(VisibilityEditProductButton));
+            }
+        }
+ 
         #region Search
 
         public string SearchString
@@ -93,6 +156,7 @@ namespace app.ViewModels
             }
         }
 
+        #endregion
         #region Errors
 
 
@@ -146,6 +210,7 @@ namespace app.ViewModels
         }
 
         #endregion
+
         #region Methods
 
         private void Sort()
@@ -195,7 +260,24 @@ namespace app.ViewModels
             }
         }
 
+        private void FilterProducts()
+        {
+            // Фильтрация списка продуктов в соответствии с выбранными категориями
+            if (selectedCategories.Any())
+            {
+                Products = new List<Product>(
+                    Db.Products.GetIEnumerable()
+                    .Where(p => selectedCategories.Contains(p.Category.Name))
+                    .ToList());
+            }
+            else
+            {
+                Products = new List<Product>(Db.Products.GetIEnumerable().ToList());
+            }
+        }
+
         #endregion
+
         #region Add product from bascket
 
         public ICommand AddToBasketCommand
@@ -207,22 +289,38 @@ namespace app.ViewModels
                     addToBasketCommand = new DelegateCommand<object>((object obj) =>
                     {
                         Product? product = obj as Product;
-                        if (CurrentUser.ProductsFromBasket.Any(x => x.Product == product))
+                        if (CurrentUser.ProductsFromBasket.Any(x => x.Product.Id == product.Id))
                         {
-                            if (CurrentUser.ProductsFromBasket.First(x => x.Product == product).Quantity + 1 < 10)
+                            if (CurrentUser.ProductsFromBasket.First(x => x.Product.Id == product?.Id).Quantity + 1 < 10)
                             {
-                                CurrentUser.ProductsFromBasket.First(x => x.Product == product).Quantity += 1;
+                                SendToModalWindow("The product has been successfully added to the cart");
+                                CurrentUser.ProductsFromBasket.First(x => x.Product.Id == product?.Id).Quantity += 1;
+                                Db.Users.Update(CurrentUser);
+                                Db.Save();
+                            }
+                            else
+                            {
+                                SendToModalWindow("Exceeded the number of units of the product");
                             }
                         }
                         else
                         {
                             if (CurrentUser.ProductsFromBasket.Count() < 5)
                             {
-                                CurrentUser.ProductsFromBasket.Add(new ProductFromBasket() { Product = product });
+                                SendToModalWindow("The product has been successfully added to the cart");
+                                CurrentUser.ProductsFromBasket.Add(new ProductFromBasket()
+                                {
+                                    Product = product,
+                                    Quantity = 1
+                                });
+                                Db.Users.Update(CurrentUser);
+                                Db.Save();
                             }
                         }
+                        var db = new ApplicationContext();
+                        db.Users.Update(CurrentUser);
+                        db.SaveChanges();
                         Db.Save();
-                        //ProductsFromBasket = new(CurrentUser.ProductsFromBasket);
                     });
                 }
                 return addToBasketCommand;
@@ -241,12 +339,18 @@ namespace app.ViewModels
                 {
                     resetButtonCommand = new DelegateCommand(() =>
                     {
+                        selectedCategories.Clear();
+                        FilterProducts();
                         RangeFrom = string.Empty;
                         RangeTo = string.Empty;
                         ErrorRangeFrom = string.Empty;
                         ErrorRangeTo = string.Empty;
                         SliderValue = -1;
                         SearchString = string.Empty;
+                        IsCheckedToggleButton1 = false;
+                        IsCheckedToggleButton2 = false;
+                        IsCheckedToggleButton3 = false;
+                        IsCheckedToggleButton4 = false;
                         Products = Db.Products.GetIEnumerable().ToList();
                     });
                 }
@@ -275,6 +379,47 @@ namespace app.ViewModels
         }
 
         #endregion
-        #endregion
+         
+        public ICommand CheckBoxCommand
+        {
+            get
+            {
+                if (checkBoxCommand == null)
+                {
+                    checkBoxCommand = new DelegateCommand<object>((object obj) =>
+                    {
+                        if (obj is string category)
+                        {
+                            if (selectedCategories.Contains(category))
+                            {
+                                selectedCategories.Remove(category);
+                            }
+                            else
+                            {
+                                selectedCategories.Add(category);
+                            }
+                            FilterProducts();
+                        } 
+                    });
+                }
+                return checkBoxCommand;
+            }
+        }
+          
+        public ICommand EditProductCommand
+        {
+            get
+            {
+                if (editProductCommand == null)
+                {
+                    editProductCommand = new DelegateCommand<Product>((Product product) =>
+                    {
+                        MessageBox.Show(product.ProductName);
+                    });
+                }
+                return editProductCommand;
+            }
+        }
+          
     }
 }

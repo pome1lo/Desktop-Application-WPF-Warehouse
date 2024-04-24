@@ -12,7 +12,7 @@ using app.Database;
 namespace app.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240423144835_init")]
+    [Migration("20240424163442_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -122,7 +122,7 @@ namespace app.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProductFromBasket");
+                    b.ToTable("ProductsFromBasket");
                 });
 
             modelBuilder.Entity("app.Models.User", b =>

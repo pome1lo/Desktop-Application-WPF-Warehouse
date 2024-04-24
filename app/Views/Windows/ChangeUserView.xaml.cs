@@ -15,26 +15,23 @@ using System.Windows.Shapes;
 namespace app.Views.Windows
 {
     /// <summary>
-    /// Логика взаимодействия для MainView.xaml
+    /// Логика взаимодействия для ChangeUserView.xaml
     /// </summary>
-    public partial class MainView : Window
+    public partial class ChangeUserView : Window
     {
-        public MainView()
+        public ChangeUserView()
         {
             InitializeComponent();
+        }
+
+        private void ButtonClose(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
 
         private void RollUp(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
-        }
-
-        private void GridMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                DragMove();
-            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using app.Models;
+﻿using app.Database.Repositories.MSSQL;
+using app.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace app.Database
@@ -9,6 +10,7 @@ namespace app.Database
         public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<Product> Products { get; set; } = null!;
+        public DbSet<ProductFromBasket> ProductsFromBasket { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

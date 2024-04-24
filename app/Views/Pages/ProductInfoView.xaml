@@ -21,11 +21,10 @@
                         <TextBlock Text="{Binding Product.Product.ProductName}" FontSize="20" Margin="0 0 0 20"/>
 
                         <TextBlock Text="{DynamicResource product_desc}" FontWeight="Bold" FontSize="20"/>
-                        <TextBlock Text="{Binding Product.Product.Description}" FontSize="20" Margin="0 0 0 20" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding Product.Product.Desciption}" FontSize="20" Margin="0 0 0 20" TextWrapping="Wrap"/>
 
                         <TextBlock Text="{DynamicResource product_category}" FontWeight="Bold" FontSize="20"/>
-                        <Button Content="{Binding Product.Product.Category.Name}" IsEnabled="False"
-                                Style="{DynamicResource customButtonOrange}" Margin="0 0 0 20"/>
+                        <TextBlock Text="{Binding Product.Product.Category.Name}" FontSize="20" Margin="0 0 0 20"/>
                         
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{DynamicResource product_price}" FontWeight="Bold" FontSize="20"/>
@@ -35,7 +34,7 @@
                     </StackPanel>
                 </StackPanel>
                 <Button Style="{DynamicResource customButtonOrange}"
-                        Command="{Binding AddNewProductCommand}"
+                        Command="{Binding AddNewProductCommand}" Margin="0 20 0 0"
                         Content="{DynamicResource add_card}" Width="250" Height="40" FontSize="20"/>
             </StackPanel>
         </StackPanel>

@@ -6,69 +6,80 @@
       xmlns:vm="clr-namespace:app.ViewModels"
       xmlns:local="clr-namespace:app.Views.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="900"
       Title="MenuView">
     <Page.DataContext>
         <vm:MenuViewModel/>
     </Page.DataContext>
-    <Border Margin="0 80 0 0" Padding="20 0 20 0">
+    <Page.Resources>
+        <!-- Стиль для ToggleButton, который скрывает квадратный флажок и меняет цвет фона -->
+       
+        </Page.Resources>
+        <Border Margin="0 60 0 0" Padding="0 0 20 0">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>
             <ColumnDefinition Width="*"/> 
         </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Style="{DynamicResource changeTheme}" Height="450"> 
+                <TextBlock Text="{DynamicResource product_category}"  Margin="0 15 0 5"
+                           FontWeight="Bold" TextAlignment="Center" FontSize="15"/>
+                <StackPanel Orientation="Vertical" Margin="5 0 5 10">
+                    <!-- Пять ToggleButtons с привязкой к команде в ViewModel -->
+                    <ToggleButton Style="{StaticResource TextOnlyCheckBoxStyle}" Content="{DynamicResource option1}" 
+                        Command="{Binding CheckBoxCommand}" CommandParameter="{DynamicResource option1}" Margin="0 0 0 2"
+                                  IsChecked="{Binding IsCheckedToggleButton1, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ToggleButton Style="{StaticResource TextOnlyCheckBoxStyle}" Content="{DynamicResource option2}" 
+                        Command="{Binding CheckBoxCommand}" CommandParameter="{DynamicResource option2}" Margin="0 0 0 2"
+                                  IsChecked="{Binding IsCheckedToggleButton2, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ToggleButton Style="{StaticResource TextOnlyCheckBoxStyle}" Content="{DynamicResource option3}" 
+                        Command="{Binding CheckBoxCommand}" CommandParameter="{DynamicResource option3}" Margin="0 0 0 2"
+                                  IsChecked="{Binding IsCheckedToggleButton3, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ToggleButton Style="{StaticResource TextOnlyCheckBoxStyle}" Content="{DynamicResource option4}" 
+                        Command="{Binding CheckBoxCommand}" CommandParameter="{DynamicResource option4}" Margin="0 0 0 2"
+                                  IsChecked="{Binding IsCheckedToggleButton4, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <TextBox Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         Style="{DynamicResource searchInput}" Width="150" Background="Transparent" Margin="0 0 0 15"/>
 
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
-            <!--<StackPanel.Resources>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-            </StackPanel.Resources>-->
-
-
-
-            <TextBox Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
-            <!--<StackPanel Orientation="Horizontal">
-                <custom:InputBox TextName="{DynamicResource Menu_From}" Width="90"
-                                 TextInput="{Binding RangeFrom, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 ErrorMessage="{Binding ErrorRangeFrom, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <custom:InputBox TextName="{DynamicResource Menu_To}" Width="90"
-                                 TextInput="{Binding RangeTo, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 ErrorMessage="{Binding ErrorRangeTo, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-            </StackPanel>-->
-
-            <TextBlock Text="{DynamicResource Menu_Calories}" Margin="5"/>
-            <Slider Value="{Binding SliderValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                    TickFrequency="1" Maximum="500" Minimum="130" >
-            </Slider>
-
-                <!--<StackPanel Margin="5"> Style="{StaticResource MaterialDesignDiscreteSlider}"
-                <StackPanel.Resources>
-                    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                </StackPanel.Resources>
-                <TextBlock Text="{DynamicResource Menu_ProductType}"/>
-                <RadioButton Margin="0 8 0 5" Content="{DynamicResource Menu_Drinks}"
-                                             Command="{Binding CheckedTypeCommand}"
-                                             CommandParameter="{x:Static loc:ProdType.Refreashes}"
-                                             Background="#FFFADF5A"/>
-                <RadioButton Margin="0 5 0 5" Content="{DynamicResource Menu_Meal}"
-                                             Background="#FFFADF5A"
-                                             Command="{Binding CheckedTypeCommand}"
-                                             CommandParameter="{x:Static loc:ProdType.Meal}"/>
-                <RadioButton Margin="0 5 0 5" Content="{DynamicResource Menu_Coffee}"
-                                             Command="{Binding CheckedTypeCommand}"
-                                             Background="#FFFADF5A"
-                                             CommandParameter="{x:Static loc:ProdType.Coffee}"/>
-
-
-            </StackPanel>-->
-            <!--<Button Content="{DynamicResource Menu_Find}" 
-                    Command="{Binding FindButtonCommand}"
-                    Style="{StaticResource ButtonBlack}"
-                    Width="150"/>
-            <Button Content="{DynamicResource Menu_Reset}" 
-                    Command="{Binding ResetButtonCommand}"
-                    Style="{StaticResource ButtonBlack}"
-                    Width="150"/>-->
+                <StackPanel>
+                    
+                </StackPanel>
+                
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="150"> 
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{DynamicResource price_from}" Margin="5,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <TextBox Width="70" Style="{DynamicResource customInputOrange}"  Padding="6 6 0 0"
+                                Text="{Binding ElementName=slider, Path=Minimum, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding ErrorRangeFrom, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                           Foreground="#D7596D" FontSize="12" FontWeight="Medium" FontFamily="Montserrat" Margin="0 2 0 10"
+                           TextWrapping="Wrap" RenderTransformOrigin="0.5,0.5"/>
+                    </StackPanel>
+ 
+                    <StackPanel Orientation="Vertical"  HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{DynamicResource price_to}" Margin="5,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <TextBox Width="70" Style="{DynamicResource customInputOrange}" Foreground="Black" Padding="6 6 0 0"
+                                Text="{Binding ElementName=slider, Path=Maximum, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding ErrorRangeTo, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                           Foreground="#D7596D" FontSize="12" FontWeight="Medium" FontFamily="Montserrat" Margin="0 2 0 0"
+                           TextWrapping="Wrap" RenderTransformOrigin="0.5,0.5"/>
+                    </StackPanel>
+ 
+                    <Slider x:Name="slider" Value="{Binding SliderValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+            TickFrequency="1" Maximum="500" Minimum="130" Style="{DynamicResource CustomSliderStyle}" />
+                    <Button Command="{Binding FindButtonCommand}"
+                        Style="{DynamicResource customButtonOrange}"
+                        Content="{DynamicResource Find}"
+                        Margin="5"/>
+                    <Button Command="{Binding ResetButtonCommand}"
+                        Style="{DynamicResource customButtonOrange}"
+                        Content="{DynamicResource Reset}"
+                        Margin="5"/>       
+                </StackPanel> 
         </StackPanel>
 
         <ListView ItemsSource="{Binding Products, UpdateSourceTrigger=PropertyChanged}" 
@@ -117,17 +128,16 @@
                 <DataTemplate>
                     <Border BorderBrush="Black" BorderThickness="1"  Margin="10" Padding="15">
                         <StackPanel Orientation="Vertical">
-                            <Image Stretch="Fill" Source="{Binding Image}" Width="120"/>
+                            <Image Stretch="Fill" Source="{Binding Image}" Width="120" Height="120"/>
                             <TextBlock Text="{Binding ProductName}" Width="100" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap" Margin="2"/>
                                 <TextBlock Text="{Binding Price, StringFormat={}{0:C2}}" Width="100" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap" Margin="2"/>
                             <DockPanel>
-                                <Button Style="{DynamicResource customButtonOrange}" DockPanel.Dock="Left"
-                                    Command="{Binding RelativeSource={RelativeSource AncestorType ={x:Type ListView}}, Path=DataContext.AddToBasketCommand}"
-                                    CommandParameter="{Binding}" Content="{DynamicResource about}" Margin="5"/>
+                                    <Button Style="{DynamicResource customButtonOrange}" DockPanel.Dock="Left" Visibility="{Binding RelativeSource={RelativeSource AncestorType ={x:Type ListView}}, Path=DataContext.VisibilityEditProductButton, UpdateSourceTrigger=PropertyChanged}"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType ={x:Type ListView}}, Path=DataContext.EditProductCommand}"
+                                    CommandParameter="{Binding}" Content="{DynamicResource change}" Margin="5"/>
                                 <Button  Style="{DynamicResource customButtonOrange}" DockPanel.Dock="Right"
                                     Command="{Binding RelativeSource={RelativeSource AncestorType ={x:Type ListView}}, Path=DataContext.AddToBasketCommand}"
                                     CommandParameter="{Binding}" Content="{DynamicResource card}" Margin="5"/>
-
                             </DockPanel>
                         </StackPanel>
                     </Border>

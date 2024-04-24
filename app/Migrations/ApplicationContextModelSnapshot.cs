@@ -119,7 +119,7 @@ namespace app.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProductFromBasket");
+                    b.ToTable("ProductsFromBasket");
                 });
 
             modelBuilder.Entity("app.Models.User", b =>

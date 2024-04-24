@@ -13,6 +13,8 @@ namespace app.Database
 
         private UserRepository? userRepository;
         private ProductRepository? productRepository;
+        private CategoriesRepository? categoryRepository;
+        private ProductFromBascketRepository? productFromBascketRepository;
 
         public UserRepository Users
         {
@@ -20,7 +22,7 @@ namespace app.Database
             {
                 if (userRepository == null)
                 {
-                    userRepository = new UserRepository();
+                    userRepository = new UserRepository(this.db);
                 }
                 return userRepository;
             }
@@ -31,12 +33,35 @@ namespace app.Database
             {
                 if (productRepository == null)
                 {
-                    productRepository = new ProductRepository();
+                    productRepository = new ProductRepository(this.db);
                 }
                 return productRepository;
             }
         }
+        
+        public CategoriesRepository Categories
+        {
+            get
+            {
+                if (categoryRepository == null)
+                {
+                    categoryRepository = new CategoriesRepository(this.db);
+                }
+                return categoryRepository;
+            }
+        }
 
+        public ProductFromBascketRepository ProductsFromBascket
+        {
+            get
+            {
+                if (productFromBascketRepository == null)
+                {
+                    productFromBascketRepository = new ProductFromBascketRepository(this.db);
+                }
+                return productFromBascketRepository;
+            }
+        }
         public void Save()
         { 
             db.SaveChanges();

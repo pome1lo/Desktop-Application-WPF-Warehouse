@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace app.Database.Repositories.MSSQL
 {
-    internal class UserRepository : IRepository<User>
+    internal class CategoriesRepository : IRepository<Category>
     {
         private ApplicationContext db { get; set; }
 
         #region Constructor 
 
-        public UserRepository(ApplicationContext db)
+        public CategoriesRepository(ApplicationContext db)
         {
             this.db = db;
         }
@@ -23,32 +23,44 @@ namespace app.Database.Repositories.MSSQL
 
         #region Methods
 
-        public IEnumerable<User> GetIEnumerable()
+        public void Create(Category item)
         {
-            return db.Users.Include(x => x.ProductsFromBasket);
-        }
-        public User? Get(int id)
-        {
-            return GetIEnumerable().ToList().Find(x => x.Id == id);
-        }
-        public void Create(User user)
-        {
-            db.Users.Add(user);
-        }
-
-        public void Update(User user)
-        {
-            db.Entry(user).State = EntityState.Modified;
+            db.Categories.Add(item);
         }
 
         public void Delete(int id)
         {
-            User? user = db.Users.Find(id);
+            Category? type = db.Categories.Find(id);
 
-            if (user != null)
+            if (type != null)
             {
-                db.Users.Remove(user);
+                db.Categories.Remove(type);
             }
+        }
+
+        public Category GetByName(string Name)
+        {
+            if (!db.Categories.ToList().Any(x => x.Name == Name))
+            {
+                db.Categories.Add(new Category() { Name = Name });
+                db.SaveChanges();
+            }
+            return db.Categories.First(x => x.Name == Name);
+        }
+
+        public Category? Get(int id)
+        {
+            return db.Categories.Find(id);
+        }
+
+        public IEnumerable<Category> GetIEnumerable()
+        {
+            return db.Categories;
+        }
+
+        public void Update(Category item)
+        {
+            db.Entry(item).State = EntityState.Modified;
         }
 
         public void Save()
@@ -77,7 +89,6 @@ namespace app.Database.Repositories.MSSQL
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
         #endregion
 
         #endregion

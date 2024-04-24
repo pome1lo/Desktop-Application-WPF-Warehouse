@@ -1,0 +1,78 @@
+﻿<Page x:Class="app.Views.Pages.AdminView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:vm="clr-namespace:app.ViewModels"
+      xmlns:local="clr-namespace:app.Views.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AdminView">
+    <Page.DataContext>
+        <vm:AdminViewModel/>
+    </Page.DataContext>
+    <ScrollViewer Margin="0 60 0 0" Height="450">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Width="150" TextAlignment="Center" Text="{DynamicResource fio}"/>
+                <TextBlock Width="150" TextAlignment="Center" Text="{DynamicResource username}"/>
+                <TextBlock Width="150" TextAlignment="Center" Text="{DynamicResource password}"/>
+                <TextBlock Width="150" TextAlignment="Center" Text="{DynamicResource Email}"/>
+                <TextBlock Width="150" TextAlignment="Center" Text="{DynamicResource isadmin}"/>
+            </StackPanel>
+            <ListView ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged}" 
+          HorizontalContentAlignment="Center"
+          Background="Transparent" BorderBrush="Transparent"
+          SelectedItem="{Binding SelectedItemForUsersDB, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard >
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Style.Triggers>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border>
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="{x:Static MouseAction.LeftClick}"
+                                               Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.SelectedItemForUsersDB}"
+                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=SelectedItem}"/>
+                                        </Border.InputBindings>
+                                        <ContentPresenter />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="1"  Margin="2" Padding="5">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding FIO}" Width="150" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap" Margin="2" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Email}" Width="150" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap" Margin="2"  VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Username}" Width="150" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap" Margin="2"  VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Password}" Width="150" FontWeight="Bold" TextAlignment="Center"  Margin="2"  VerticalAlignment="Center"/>
+                                <CheckBox IsChecked="{Binding IsAdmin}"  VerticalAlignment="Center" Margin="15 0 15 0"/>
+                                <Button Style="{DynamicResource customButtonOrange}"  Margin="15 0 10 0"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType ={x:Type ListView}}, Path=DataContext.EditUserCommand}"
+                            CommandParameter="{Binding}" Content="{DynamicResource change}" />
+                                <Button  Style="{DynamicResource customButtonOrange}"  Margin="15 0 10 0"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType ={x:Type ListView}}, Path=DataContext.DeleteUserCommand}"
+                            CommandParameter="{Binding}" Content="{DynamicResource delete}"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

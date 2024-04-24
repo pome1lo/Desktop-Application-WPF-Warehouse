@@ -6,15 +6,19 @@
         xmlns:vm="clr-namespace:app.ViewModels"
         xmlns:local="clr-namespace:app.Views.Windows"
         mc:Ignorable="d" Name="view"
+        ResizeMode="NoResize"
+        MouseDown="GridMouseDown"
         WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
         Title="MainView" Height="500" Width="900">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
-    <Border CornerRadius="13">
-        <Border CornerRadius="10" BorderThickness="2"> 
+    <Border CornerRadius="15">
+        <Border CornerRadius="10" BorderThickness="2" Background="Transparent"> 
             <Grid Background="Transparent">
-                <Grid VerticalAlignment="Top"
+                <Grid VerticalAlignment="Top" Style="{DynamicResource gridChangeTheme}"
                       Height="60" Panel.ZIndex="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50*"/>
@@ -23,7 +27,7 @@
                     </Grid.ColumnDefinitions>
                     <!--<Button Grid.Column="1" Width="200" Height="40">Admin panel</Button>-->
                     <Button x:Name="button" Grid.Column="0" Cursor="Hand" Command="{Binding ShowHomeCommand}" Background="Transparent" BorderThickness="0"  HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" >
-                        <Image Width="100" Source="\Static\Img\Logo.png"/>
+                        <Image Width="100" Source="{Binding CurrentLogoImage, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
                                 <Border>
@@ -33,32 +37,29 @@
                         </Button.Template>
                     </Button>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                         
-                        <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                        <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
                             <Button Command="{Binding ShowAdminCommand}" Content="⚙️" 
                                     Visibility="{Binding VisibilityAdminButton}"
-                                    Style="{DynamicResource customButtonHeader}"
+                                    Style="{DynamicResource customButtonHeader}" 
                                     Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </Border>
-                        <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
                             <Button Command="{Binding ShowMenuCommand}" Content="📖"
                                     Style="{DynamicResource customButtonHeader}"
                                     Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </Border>
-                        <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
+                            <Button Command="{Binding ShowBasketCommand}" Content="🧺"
+                                    Style="{DynamicResource customButtonHeader}"
+                                    Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        </Border>
+                        <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
                             <Button Command="{Binding ShowProfileCommand}" Content="👤"
                                     Style="{DynamicResource customButtonHeader}"
                                     Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </Border>
-                        <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Button Command="{Binding ExitAccountCommand}" Content="➡️"
-                                    CommandParameter="{Binding ElementName=view}"
-                                    Style="{DynamicResource customButtonHeader}"
-                                    Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                        </Border>
- 
-                        
-
+                     
                         <Button Command="{Binding ToggleImageThemeCommand}" Name="button4">
                             <Button.RenderTransform>
                                 <TransformGroup>
@@ -201,15 +202,19 @@
                                 </Image>
                             </Button.Content>
                         </Button>
- 
+                        <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
+                            <Button Command="{Binding ExitAccountCommand}" Content="➡️"
+                                CommandParameter="{Binding ElementName=view}"
+                                Style="{DynamicResource customButtonHeader}"
+                                Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        </Border>
                     </StackPanel>
                     <Grid x:Name="grid" Grid.Column="2" HorizontalAlignment="Right" Width="100" RenderTransformOrigin="0.5,0.5"> 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="button2" Click="RollUp"        
-                                Command="{Binding ExitCommand}"
+                        <Button x:Name="button2" Click="RollUp"   
                                 BorderThickness="0" 
                                 Content="―"
                                 FontSize="10"

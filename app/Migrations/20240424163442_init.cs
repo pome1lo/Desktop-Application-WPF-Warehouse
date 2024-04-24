@@ -88,7 +88,7 @@ namespace app.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductFromBasket",
+                name: "ProductsFromBasket",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -99,15 +99,15 @@ namespace app.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductFromBasket", x => x.Id);
+                    table.PrimaryKey("PK_ProductsFromBasket", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductFromBasket_Products_ProductId",
+                        name: "FK_ProductsFromBasket_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductFromBasket_Users_UserId",
+                        name: "FK_ProductsFromBasket_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
@@ -119,19 +119,19 @@ namespace app.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductFromBasket_ProductId",
-                table: "ProductFromBasket",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductFromBasket_UserId",
-                table: "ProductFromBasket",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductsFromBasket_ProductId",
+                table: "ProductsFromBasket",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductsFromBasket_UserId",
+                table: "ProductsFromBasket",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -141,7 +141,7 @@ namespace app.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "ProductFromBasket");
+                name: "ProductsFromBasket");
 
             migrationBuilder.DropTable(
                 name: "Products");

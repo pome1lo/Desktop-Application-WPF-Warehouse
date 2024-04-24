@@ -25,4 +25,17 @@
     <v:String x:Key="about">О товаре</v:String>
     <v:String x:Key="card">В корзину</v:String>
     <v:String x:Key="add_card">Добавь в корзину</v:String>
+    <v:String x:Key="basket">Корзина</v:String>
+    <v:String x:Key="price_to">До</v:String>
+    <v:String x:Key="price_from">От</v:String>
+    <v:String x:Key="Find">Поиск</v:String> 
+    <v:String x:Key="Reset">Сбросить</v:String>
+
+    <v:String x:Key="option1">Фасад</v:String>
+    <v:String x:Key="option2">Блоки и кирпичи</v:String>
+    <v:String x:Key="option3">Металлопродукция</v:String>
+    <v:String x:Key="option4">Электрика</v:String>  
+    <v:String x:Key="change">Изменить</v:String>  
+    <v:String x:Key="delete">Удалить</v:String>
+    <v:String x:Key="isadmin">Является ли админом</v:String>  
 </ResourceDictionary>

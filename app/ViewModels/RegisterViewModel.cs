@@ -128,7 +128,8 @@ namespace app.ViewModels
 
         private void GoToTheMainPage(Window view)
         {
-            ViewModelBase.CurrentUser = users.Find(x => x.Username == RegisteredUser.Username);
+            //var db = new ApplicationContext();
+            ViewModelBase.CurrentUser = Db.Users.GetIEnumerable().FirstOrDefault(x => x.Username == RegisteredUser.Username);
             ShowMainWindow();
             view?.Close();
         }

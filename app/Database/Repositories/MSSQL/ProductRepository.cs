@@ -14,9 +14,9 @@ namespace app.Database.Repositories.MSSQL
 
         #region Constructor 
 
-        public ProductRepository()
+        public ProductRepository(ApplicationContext db)
         {
-            this.db = new ApplicationContext();
+            this.db = db;
         }
 
         #endregion
@@ -29,7 +29,7 @@ namespace app.Database.Repositories.MSSQL
 
             //products.ToList().ForEach(x => x.Description = db.Descriptions.ToArray()[x.Id - 1]);
 
-            return db.Products;
+            return db.Products.Include(x => x.Category);
         }
 
         public void Update(Product product)

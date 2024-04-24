@@ -6,14 +6,17 @@
         xmlns:local="clr-namespace:app.Views.Windows"
         mc:Ignorable="d"
         Name="view"
-        xmlns:vm="clr-namespace:app.ViewModels" xmlns:components="clr-namespace:CustomControlLibrary.Components;assembly=CustomControlLibrary"
+        xmlns:vm="clr-namespace:app.ViewModels" 
+        xmlns:components="clr-namespace:CustomControlLibrary.Components;assembly=CustomControlLibrary"
         ResizeMode="NoResize"
+        WindowStyle="None"
+        Background="Transparent"
         WindowStartupLocation="CenterScreen"
-        Title="RegisterView" Height="590" Width="300">
+        Title="RegisterView" Height="530" Width="300">
     <Window.DataContext>
         <vm:RegisterViewModel/>
     </Window.DataContext>
-    <Border Padding="30 10 0 30">
+    <Border Padding="30 10 0 0" CornerRadius="15">
         <StackPanel>
             <Grid HorizontalAlignment="Right" Width="100">
                 <Grid.ColumnDefinitions>
@@ -77,7 +80,7 @@
                 </Button>
             </Grid>
             <StackPanel Margin="0 0 30 0">
-            <Image Source="\Static\Img\Logo.png" Width="150" />
+            <Image Source="\Static\Img\LightLogo.png" Width="150" />
             <TextBlock Text="{DynamicResource ResourceKey=register_button}"
                    Margin="15"
                    TextAlignment="Center" FontSize="25"/>
@@ -128,7 +131,7 @@
                 TextWrapping="Wrap" RenderTransformOrigin="0.5,0.5"/>    
      
 
-            <Button Style="{DynamicResource customButtonActive}" 
+            <Button Style="{DynamicResource customButtonOrange}" Width="100" 
                 Content="{DynamicResource ResourceKey=register_button}"
                 Command="{Binding RegisterCommand}"
                 CommandParameter="{Binding ElementName=view}"/>

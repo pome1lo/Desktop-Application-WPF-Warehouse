@@ -9,11 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Static\Img\DarkLogo.png" />
     <None Remove="Static\Img\en.png" />
     <None Remove="Static\Img\ImgDefault.png" />
+    <None Remove="Static\Img\LightLogo.png" />
     <None Remove="Static\Img\Logo.ico" />
     <None Remove="Static\Img\Logo.png" />
     <None Remove="Static\Img\rus.png" />
+    <None Remove="Static\Img\search_icon.png" />
     <None Remove="Static\Img\ThemeDark.png" />
     <None Remove="Static\Img\ThemeLight.png" />
   </ItemGroup>
@@ -40,11 +43,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Static\Img\DarkLogo.png" />
     <Resource Include="Static\Img\en.png" />
     <Resource Include="Static\Img\ImgDefault.png" />
+    <Resource Include="Static\Img\LightLogo.png" />
     <Resource Include="Static\Img\Logo.ico" />
-    <Resource Include="Static\Img\Logo.png" />
     <Resource Include="Static\Img\rus.png" />
+    <Resource Include="Static\Img\search_icon.png" />
     <Resource Include="Static\Img\ThemeDark.png" />
     <Resource Include="Static\Img\ThemeLight.png" />
   </ItemGroup>

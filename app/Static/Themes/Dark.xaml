@@ -5,6 +5,18 @@
         <Setter Property="Background" Value="#0E1026"/>
     </Style>
 
+    <Style TargetType="StackPanel" x:Key="changeTheme">
+        <Setter Property="Background" Value="#0E1026"/>
+    </Style>
+
+    <Style TargetType="StackPanel" x:Key="changeTheme">
+        <Setter Property="Background" Value="#15193b"/>
+    </Style>
+    
+    <Style TargetType="Grid" x:Key="gridChangeTheme">
+        <Setter Property="Background" Value="#15193b"/>
+    </Style>
+
     <Style TargetType="TextBox" x:Key="customInput">
         <Setter Property="Background" Value="#15193b"/>
         <Setter Property="Foreground" Value="White"/>

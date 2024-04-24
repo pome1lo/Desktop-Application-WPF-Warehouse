@@ -1,4 +1,5 @@
-﻿using app.Models;
+﻿using app.Database;
+using app.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace app.Database.Repositories.MSSQL
 {
-    internal class UserRepository : IRepository<User>
+    internal class ProductFromBascketRepository : IRepository<ProductFromBasket>
     {
         private ApplicationContext db { get; set; }
 
         #region Constructor 
 
-        public UserRepository(ApplicationContext db)
+        public ProductFromBascketRepository(ApplicationContext db)
         {
             this.db = db;
         }
@@ -23,31 +24,35 @@ namespace app.Database.Repositories.MSSQL
 
         #region Methods
 
-        public IEnumerable<User> GetIEnumerable()
+        public IEnumerable<ProductFromBasket> GetIEnumerable()
         {
-            return db.Users.Include(x => x.ProductsFromBasket);
-        }
-        public User? Get(int id)
-        {
-            return GetIEnumerable().ToList().Find(x => x.Id == id);
-        }
-        public void Create(User user)
-        {
-            db.Users.Add(user);
+            return db.ProductsFromBasket
+                .Include(x => x.Product)
+                .Include(x => x.Product.Category);
         }
 
-        public void Update(User user)
+        public ProductFromBasket? Get(int product)
         {
-            db.Entry(user).State = EntityState.Modified;
+            return db.ProductsFromBasket.Include(x => x.Product).FirstOrDefault(x=> x.Id == product);
+        }
+
+        public void Create(ProductFromBasket item)
+        {
+            db.ProductsFromBasket.Add(item);
+        }
+
+        public void Update(ProductFromBasket item)
+        {
+            db.Entry(item).State = EntityState.Modified;
         }
 
         public void Delete(int id)
         {
-            User? user = db.Users.Find(id);
+            ProductFromBasket? productFromBasket = db.ProductsFromBasket.Find(id);
 
-            if (user != null)
+            if (productFromBasket != null)
             {
-                db.Users.Remove(user);
+                db.ProductsFromBasket.Remove(productFromBasket);
             }
         }
 
@@ -62,14 +67,14 @@ namespace app.Database.Repositories.MSSQL
 
         public virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!disposed)
             {
                 if (disposing)
                 {
                     db.Dispose();
                 }
             }
-            this.disposed = true;
+            disposed = true;
         }
 
         public void Dispose()

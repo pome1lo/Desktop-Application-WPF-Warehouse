@@ -1,5 +1,6 @@
 ﻿using app.Commands;
 using app.Database;
+using app.Database.Repositories.MSSQL;
 using app.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace app.ViewModels
 
             this.Product = new ProductFromBasket()
             {
-                Product = product,
+                Product = product
             };
         }
 
