@@ -25,5 +25,6 @@
                 <Setter Property="Background" Value="Red"/>
             </Trigger>
         </Style.Triggers>
-    </Style>
+    </Style> 
+
 </ResourceDictionary>

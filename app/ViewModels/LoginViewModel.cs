@@ -1,14 +1,10 @@
 ﻿using app.Commands;
 using app.Database;
 using app.Models;
-using app.Views.Windows;
 using DataEncryption;
 using DataValidation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using static DataValidation.Validator;
@@ -21,7 +17,7 @@ namespace app.ViewModels
         {
             this.Db = new UnitOfWork();
             this.validator = new Validator(this);
-            this.users = Db?.Users.GetIEnumerable().ToList();
+            this.users = Db.Users.GetIEnumerable().ToList();
         }
 
         private UnitOfWork Db;
@@ -35,9 +31,10 @@ namespace app.ViewModels
         private string errorUserNameMessage = string.Empty;
         private string errorEmailMessage = string.Empty;
 
-        private DelegateCommand? exitCommand; 
+        private DelegateCommand? exitCommand;
         private DelegateCommand<Window>? logInCommand;
 
+        #region Property
 
         public string Password
         {
@@ -58,7 +55,8 @@ namespace app.ViewModels
                 OnPropertyChanged(nameof(UserName));
             }
         }
-         
+
+        #endregion
 
         #region Errors
 
@@ -98,7 +96,7 @@ namespace app.ViewModels
 
         private void GoToTheMainPage(Window view)
         {
-            ViewModelBase.CurrentUser = users.Find(x => x.Username == UserName);
+            CurrentUser = Db.Users.GetIEnumerable().FirstOrDefault(x => x.Username == UserName);
             ShowMainWindow();
             view?.Close();
         }
@@ -120,7 +118,7 @@ namespace app.ViewModels
                 if (logInCommand == null)
                 {
                     logInCommand = new DelegateCommand<Window>((Window obj) =>
-                    { 
+                    {
                         if (IsTheUserDataCorrect())
                         {
                             if (users.Any(x => x.Username == UserName && CryptographerBuilder.Decrypt(x.Password) == Password))
@@ -129,7 +127,7 @@ namespace app.ViewModels
                             }
                             else
                             {
-                                SendToModalWindow("There is no such user.");
+                                SendToModalWindow("Пользователь не найден");
                             }
                         }
                     });
@@ -137,7 +135,7 @@ namespace app.ViewModels
                 return logInCommand;
             }
         }
-          
+
 
         public ICommand ExitCommand
         {

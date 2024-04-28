@@ -48,6 +48,7 @@
     <Resource Include="Static\Img\ImgDefault.png" />
     <Resource Include="Static\Img\LightLogo.png" />
     <Resource Include="Static\Img\Logo.ico" />
+    <Resource Include="Static\Img\Logo.png" />
     <Resource Include="Static\Img\rus.png" />
     <Resource Include="Static\Img\search_icon.png" />
     <Resource Include="Static\Img\ThemeDark.png" />

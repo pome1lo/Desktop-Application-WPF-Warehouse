@@ -1,7 +1,7 @@
 ﻿using app.Commands;
 using app.Database;
 using app.Models;
-using app.Views.Pages;
+using app.Views.Windows;
 using DataValidation;
 using Microsoft.Win32;
 using System.Collections.Generic;
@@ -11,19 +11,19 @@ using static DataValidation.Validator;
 
 namespace app.ViewModels
 {
-    class NewProductViewModel : ViewModelBase
+    internal class ChangeProductViewModel : ViewModelBase
     {
-        public NewProductViewModel()
+        public ChangeProductViewModel(Product product)
         {
+            this.product = product;
             this.validator = new Validator(this);
             Db = new UnitOfWork();
             Categories = Db.Categories.GetIEnumerable().ToList();
         }
 
-        private Product product = new();
+        private Product product;
         private UnitOfWork Db;
         private Validator validator;
-
         private List<Category> categories;
 
         private string errorProductNameMessage = string.Empty;
@@ -32,7 +32,7 @@ namespace app.ViewModels
         private string errorProductDescriptionMessage = string.Empty;
         private string errorProductPictureMessage = string.Empty;
 
-        private DelegateCommand? addNewProductCommand;
+        private DelegateCommand<ChangeProductView>? editProductCommand;
         private DelegateCommand? openFileCommand;
 
         #region Property
@@ -155,11 +155,10 @@ namespace app.ViewModels
             }
         }
 
-
         #endregion
-        
-        #region Methods
 
+        #region Methods
+         
         private bool IsNullCategory()
         {
             if (SelectedCategory == null)
@@ -210,29 +209,27 @@ namespace app.ViewModels
                 return openFileCommand;
             }
         }
-        public ICommand AddNewProductCommand
+         
+        public ICommand EditProductCommand
         {
             get
             {
-                if (addNewProductCommand == null)
+                if (editProductCommand == null)
                 {
-                    addNewProductCommand = new DelegateCommand(() =>
+                    editProductCommand = new DelegateCommand<ChangeProductView>((ChangeProductView view) =>
                     {
                         if (NewProductValidate())
                         {
-                            product.Category = Db.Categories.GetIEnumerable().FirstOrDefault(x => x.Name == SelectedCategory.Name);
-                            Db.Products.Create(product);
-                            Db.Save();
-                            SendToModalWindow("The product was successfully added to the database.");
-
-                            Db.Save();
-                            ShowPage(new MenuView());
+                            var db = new ApplicationContext();
+                            db.Products.Update(product);
+                            db.SaveChanges();
+                            view.Close();
                         }
                     });
                 }
-                return addNewProductCommand;
+                return editProductCommand;
             }
-        }
+        } 
 
         #endregion
     }

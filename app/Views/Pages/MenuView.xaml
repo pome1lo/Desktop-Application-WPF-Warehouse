@@ -10,12 +10,8 @@
       Title="MenuView">
     <Page.DataContext>
         <vm:MenuViewModel/>
-    </Page.DataContext>
-    <Page.Resources>
-        <!-- Стиль для ToggleButton, который скрывает квадратный флажок и меняет цвет фона -->
-       
-        </Page.Resources>
-        <Border Margin="0 60 0 0" Padding="0 0 20 0">
+    </Page.DataContext> 
+    <Border Margin="0 60 0 0" Padding="0 0 20 0">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>
@@ -126,7 +122,7 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="Black" BorderThickness="1"  Margin="10" Padding="15">
+                    <Border   BorderThickness="1"  Margin="10" Padding="15">
                         <StackPanel Orientation="Vertical">
                             <Image Stretch="Fill" Source="{Binding Image}" Width="120" Height="120"/>
                             <TextBlock Text="{Binding ProductName}" Width="100" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap" Margin="2"/>

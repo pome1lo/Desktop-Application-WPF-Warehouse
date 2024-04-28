@@ -33,7 +33,7 @@ namespace app.ViewModels
         {
             MainView view = new MainView();
             MainFrame = view.MainFrame;
-            ShowPage(new HomeView());
+            ShowPage(new MenuView());
             view.Show();
         }
 

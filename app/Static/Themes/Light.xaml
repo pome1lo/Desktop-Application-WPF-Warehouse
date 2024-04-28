@@ -3,6 +3,7 @@
                     xmlns:v="clr-namespace:System;assembly=mscorlib">
     <Style TargetType="Border">
         <Setter Property="Background" Value="#FFE4CA"/> 
+        <Setter Property="BorderBrush" Value="Black"/> 
     </Style>
 
     <Style TargetType="TextBlock">
@@ -16,8 +17,7 @@
     <Style TargetType="Grid" x:Key="gridChangeTheme">
         <Setter Property="Background" Value="#FFB793"/>
     </Style>
-
-
+ 
     <Style TargetType="TextBox" x:Key="customInput">
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Background" Value="#FFB793"/> 
@@ -53,6 +53,11 @@
                         CornerRadius="10" Padding="6">
                         <ContentPresenter Margin="0" x:Name="PART_ContentHost"/>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers> 
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -78,18 +83,40 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <ScrollViewer Margin="0" x:Name="PART_ContentHost" Grid.Column="0"/>
-                            <Image Source=".\..\Img\search_icon.png" 
-                                   Width="15" Height="15" 
-                                   VerticalAlignment="Center" 
-                                   Margin="0 0 8 0" Grid.Column="1"/>
+                            <TextBlock Text="🔍" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 5 0"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+ 
+    <Style TargetType="Button" x:Key="customButtonActive">
+        <Setter Property="Foreground" Value="#FFB793"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                     BorderBrush="{TemplateBinding BorderBrush}"
+                     BorderThickness="1"
+                     CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
 
-
+        </Setter>
+    </Style>
+ 
     <Style x:Key="TextOnlyCheckBoxStyle" TargetType="ToggleButton">
         <Setter Property="Template">
             <Setter.Value>
@@ -117,14 +144,12 @@
         </Style.Triggers>
     </Style>
 
-    <!-- Style for the RepeatButtons on the track -->
     <Style x:Key="RepeatButtonTransparentStyle" TargetType="RepeatButton">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
 
-    <!-- Style for the Thumb (the draggable circle) -->
     <Style x:Key="ThumbCustomStyle" TargetType="Thumb">
         <Setter Property="Template">
             <Setter.Value>
@@ -209,29 +234,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
-
-    <Style TargetType="Button" x:Key="customButtonActive">
-        <Setter Property="Foreground" Value="#FFB793"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Background" Value="Black"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="1" 
-                        CornerRadius="10">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
+ 
     <Style TargetType="Button" x:Key="customButtonOrange">
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Height" Value="30"/>
@@ -248,6 +251,11 @@
                         CornerRadius="10">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#B75D2F"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -275,8 +283,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
+ 
     <Style TargetType="Button" x:Key="customButton">
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Foreground" Value="Black"/>
@@ -284,15 +291,50 @@
         <Setter Property="Height" Value="30"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="FontWeight" Value="UltraBold"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="Button" x:Key="customButtonHeader">
-        <Setter Property="Cursor" Value="Hand"/> 
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Height" Value="50"/>
         <Setter Property="Width" Value="50"/>
-        <Setter Property="FontSize" Value="25"/> 
-        <Setter Property="BorderThickness" Value="0"/> 
+        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Content="{TemplateBinding Content}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"> 
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger> 
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
-     
+ 
 </ResourceDictionary>

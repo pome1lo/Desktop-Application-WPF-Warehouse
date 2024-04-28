@@ -25,7 +25,7 @@ namespace app.Database.Repositories.MSSQL
 
         public IEnumerable<User> GetIEnumerable()
         {
-            return db.Users.Include(x => x.ProductsFromBasket);
+            return db.Users;
         }
         public User? Get(int id)
         {

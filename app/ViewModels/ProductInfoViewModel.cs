@@ -2,6 +2,7 @@
 using app.Database;
 using app.Database.Repositories.MSSQL;
 using app.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,9 +40,7 @@ namespace app.ViewModels
         }
 
         #region Command
-
-        #region Add to basket 
-
+          
         public ICommand AddToBasketCommand
         {
             get
@@ -49,36 +48,45 @@ namespace app.ViewModels
                 if (addToBasketCommand == null)
                 {
                     addToBasketCommand = new DelegateCommand(() =>
-                    {
-                        if (CurrentUser.ProductsFromBasket.Any(x => x.Product == Product?.Product))
+                    { 
+                        using var db = new ApplicationContext();
+                        if (db.ProductsFromBasket.Any(x => x.Product.Id == product.Product.Id))
                         {
-                            if (CurrentUser.ProductsFromBasket.First(x => x.Product == product?.Product).Quantity + 1 < 10)
+                            if (db.ProductsFromBasket.Where(x => x.UserId == CurrentUser.Id).First().Quantity + 1 < 10)
                             {
-                                SendToModalWindow("The product has been successfully added to the cart");
-                                CurrentUser.ProductsFromBasket.First(x => x.Product == product?.Product).Quantity += 1;
-                                Db.Save();
+                                SendToModalWindow("Товар успешно добавлен в корзину");
+                                var prod = db.ProductsFromBasket.Where(x => x.UserId == CurrentUser.Id).First();
+                                prod.Quantity += 1;
+                                db.ProductsFromBasket.Update(prod);
+                                db.SaveChanges();
                             }
                             else
                             {
-                                SendToModalWindow("Exceeded the number of units of the product");
+                                SendToModalWindow("Превышено количество единиц товара");
                             }
                         }
                         else
                         {
-                            if (CurrentUser.ProductsFromBasket.Count() < 5)
+                            var prod = new ProductFromBasket()
                             {
-                                SendToModalWindow("The product has been successfully added to the cart");
-                                CurrentUser.ProductsFromBasket.Add(Product);
-                            }
+                                Product = db.Products.First(x => x.Id == product.Id),
+                                Quantity = 1,
+                                UserId = CurrentUser.Id
+                            };
+                            db.ProductsFromBasket.Add(prod);
+                            db.Users.Update(CurrentUser);
+                            db.SaveChanges();
+                            SendToModalWindow("Товар успешно добавлен в корзину");
                         }
+                        db.Users.Update(CurrentUser);
+                        db.SaveChanges();
                         Db.Save();
                     });
                 }
                 return addToBasketCommand;
             }
         }
-
-        #endregion
+         
         #endregion
     }
 }

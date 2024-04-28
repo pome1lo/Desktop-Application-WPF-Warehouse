@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace app.Models
 {
-    public class Category
+    public class ProductFromOrder
     {
         [Key] public int Id { get; set; } = default;
-        public string Name { get; set; } = string.Empty;
+        public string ProductName { get; set; } = string.Empty;
+        public decimal Price { get; set; } = 0;
+        public string Image { get; set; } = @"\Static\Img\ImgDefault.png";
     }
 }

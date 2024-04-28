@@ -110,16 +110,43 @@ namespace app.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("ProductsFromBasket");
+                });
+
+            modelBuilder.Entity("app.Models.ProductFromOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("ProductsFromOrder");
                 });
 
             modelBuilder.Entity("app.Models.User", b =>
@@ -192,16 +219,19 @@ namespace app.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("app.Models.User", null)
-                        .WithMany("ProductsFromBasket")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("app.Models.User", b =>
+            modelBuilder.Entity("app.Models.ProductFromOrder", b =>
                 {
-                    b.Navigation("ProductsFromBasket");
+                    b.HasOne("app.Models.Order", null)
+                        .WithMany("Products")
+                        .HasForeignKey("OrderId");
+                });
+
+            modelBuilder.Entity("app.Models.Order", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,13 +1,11 @@
 ﻿using app.Commands;
 using app.Database;
 using app.Models;
+using app.Views.Pages;
 using app.Views.Windows;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace app.ViewModels
@@ -20,15 +18,14 @@ namespace app.ViewModels
             Users = Db.Users.GetIEnumerable().ToList();
         }
 
-
         private UnitOfWork Db;
         private List<User> users { get; set; }
-
-
         private User selectedItemForUsersDB = new();
-
         private DelegateCommand<User>? deleteUserCommand;
         private DelegateCommand<User>? editUserCommand;
+        private DelegateCommand? addNewProduct;
+
+        #region Property
 
         public List<User> Users
         {
@@ -50,6 +47,9 @@ namespace app.ViewModels
             }
         }
 
+        #endregion
+
+        #region Commands
 
         public ICommand DeleteUserCommand
         {
@@ -58,17 +58,34 @@ namespace app.ViewModels
                 if (deleteUserCommand == null)
                 {
                     deleteUserCommand = new DelegateCommand<User>((User user) =>
-                    { 
-                        if(user.Id == CurrentUser.Id)
+                    {
+                        if (user.Id == CurrentUser.Id)
                         {
                             SendToModalWindow("Вы не можете удалить сами себя");
                         }
                         else
                         {
-                            Db.Users.Delete(user.Id);
-                            Db?.Save();
-                            Users = Db.Users.GetIEnumerable().ToList();
-                            SendToModalWindow("Пользователь успешно удален");
+                            using (var context = new ApplicationContext())
+                            {
+                                var ordersToDelete = context.Orders
+                                    .Include(x => x.User)
+                                    .Include(x => x.Products)
+                                    .Where(o => o.User.Id == user.Id).ToList();
+
+                                context.Orders.RemoveRange(ordersToDelete);
+
+                                var userToDelete = context.Users.FirstOrDefault(u => u.Id == user.Id);
+
+                                if (userToDelete != null)
+                                {
+                                    context.Users.Remove(userToDelete);
+                                }
+                                context.SaveChanges();
+                                Users = context.Users.ToList();
+                                SendToModalWindow("Пользователь успешно удален");
+                            }
+
+
                         }
                     });
                 }
@@ -94,5 +111,20 @@ namespace app.ViewModels
                 return editUserCommand;
             }
         }
+        public ICommand AddNewProduct
+        {
+            get
+            {
+                if (addNewProduct == null)
+                {
+                    addNewProduct = new DelegateCommand(() =>
+                    {
+                        ShowPage(new NewProduct());
+                    });
+                }
+                return addNewProduct;
+            }
+        }
+        #endregion
     }
 }

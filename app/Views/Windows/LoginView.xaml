@@ -15,7 +15,10 @@
     <Window.DataContext>
         <vm:LoginViewModel/>
     </Window.DataContext>
-    <Border Padding="30 10 0 0" CornerRadius="15">
+    <Window.Resources>
+        <ResourceDictionary Source="/Static/Themes/Light.xaml" />
+    </Window.Resources>
+    <Border Padding="30 10 0 0" >
         <StackPanel>
             <Grid HorizontalAlignment="Right" Width="100">
                 <Grid.ColumnDefinitions>
@@ -88,7 +91,7 @@
                 <TextBox Style="{DynamicResource ResourceKey=customInput}"
                      Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                      Padding="7 5 0 0"/>
-                <TextBlock Text="{Binding ErrorPasswordMessage, UpdateSourceTrigger=PropertyChanged}"
+                <TextBlock Text="{Binding ErrorUserNameMessage, UpdateSourceTrigger=PropertyChanged}"
                        Foreground="#D7596D"
                        FontSize="12"
                        FontWeight="Medium"
@@ -98,8 +101,8 @@
 
                 <TextBlock  Margin="5 0 0 5" Text="{DynamicResource ResourceKey=password}"/>
 
-                <components:BindablePasswordBox
-                Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                <components:BindablePasswordBox  
+                    Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                 />
                 <TextBlock x:Name="textBlock4" Text="{Binding ErrorPasswordMessage, UpdateSourceTrigger=PropertyChanged}"
                                Foreground="#D7596D"

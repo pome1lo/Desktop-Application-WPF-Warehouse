@@ -10,8 +10,7 @@ namespace app.Models
 {
     public class User
     {
-        [Key]
-        public int Id { get; set; }
+        [Key] public int Id { get; set; }
         public string FIO { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
@@ -19,7 +18,5 @@ namespace app.Models
         public bool IsAdmin { get; set; } = false;
         public string Theme { get; set; } = "Light";
         public string Language { get; set; } = ".ru-RU";
-
-        public List<ProductFromBasket> ProductsFromBasket { get; set; } = new();
     }
 }

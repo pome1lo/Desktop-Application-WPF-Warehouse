@@ -16,7 +16,7 @@
         <vm:MainViewModel/>
     </Window.DataContext>
     <Border CornerRadius="15">
-        <Border CornerRadius="10" BorderThickness="2" Background="Transparent"> 
+        <Border CornerRadius="10"> 
             <Grid Background="Transparent">
                 <Grid VerticalAlignment="Top" Style="{DynamicResource gridChangeTheme}"
                       Height="60" Panel.ZIndex="1">
@@ -27,10 +27,10 @@
                     </Grid.ColumnDefinitions>
                     <!--<Button Grid.Column="1" Width="200" Height="40">Admin panel</Button>-->
                     <Button x:Name="button" Grid.Column="0" Cursor="Hand" Command="{Binding ShowHomeCommand}" Background="Transparent" BorderThickness="0"  HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" >
-                        <Image Width="100" Source="{Binding CurrentLogoImage, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Image Width="100" Source="{Binding CurrentLogoThemeImage, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
-                                <Border>
+                                <Border Background="Transparent" Padding="15 0 0 0">
                                     <ContentPresenter/>
                                 </Border>
                             </ControlTemplate>

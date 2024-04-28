@@ -4,11 +4,6 @@ using app.Models;
 using app.Views.Windows;
 using DataEncryption;
 using DataValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using static DataValidation.Validator;
 
@@ -22,7 +17,6 @@ namespace app.ViewModels
             this.validator = new Validator(this);
             Db = new UnitOfWork();
             Password = CryptographerBuilder.Decrypt(user.Password);
-
         }
 
         private UnitOfWork Db;
@@ -36,7 +30,7 @@ namespace app.ViewModels
 
         private DelegateCommand<ChangeUserView>? editNewUserCommand;
 
-        #region Edit user
+        #region Property
 
         public string Username
         {
@@ -57,7 +51,7 @@ namespace app.ViewModels
                 OnPropertyChanged(nameof(Password));
             }
         }
-        
+
         public bool IsAdmin
         {
             get => user.IsAdmin;
@@ -77,7 +71,7 @@ namespace app.ViewModels
                 OnPropertyChanged(nameof(FIO));
             }
         }
-         
+
         public string Email
         {
             get => user.Email;
@@ -87,9 +81,6 @@ namespace app.ViewModels
                 OnPropertyChanged(nameof(Email));
             }
         }
-
-
-        #endregion
 
         #region Errors
 
@@ -135,6 +126,8 @@ namespace app.ViewModels
 
         #endregion
 
+        #endregion
+         
         #region Methods
 
         private bool NewUserValidate()
@@ -147,7 +140,7 @@ namespace app.ViewModels
 
         #endregion
 
-        #region Edit user
+        #region Commands
 
         public ICommand EditUserCommand
         {
@@ -159,13 +152,13 @@ namespace app.ViewModels
                     {
                         if (NewUserValidate())
                         {
-                            user.Password = CryptographerBuilder.Encrypt(user.Password); 
+                            user.Password = CryptographerBuilder.Encrypt(user.Password);
                             var db = new ApplicationContext();
                             db.Users.Update(user);
                             db.SaveChanges();
-                             
+
                             SendToModalWindow("Данные успешно изменены.");
-                            view.Close(); 
+                            view.Close();
                         }
                     });
                 }

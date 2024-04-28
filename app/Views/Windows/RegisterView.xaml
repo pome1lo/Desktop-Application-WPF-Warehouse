@@ -16,7 +16,10 @@
     <Window.DataContext>
         <vm:RegisterViewModel/>
     </Window.DataContext>
-    <Border Padding="30 10 0 0" CornerRadius="15">
+    <Window.Resources>
+        <ResourceDictionary Source="/Static/Themes/Light.xaml" />
+    </Window.Resources>
+    <Border Padding="30 10 0 0">
         <StackPanel>
             <Grid HorizontalAlignment="Right" Width="100">
                 <Grid.ColumnDefinitions>
@@ -109,7 +112,7 @@
     
             <TextBlock Margin="5 0 0 5" Text="{DynamicResource ResourceKey=password}"/>
             <components:BindablePasswordBox Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                            />
+                                          IsDarkTheme="False"  />
                 <TextBlock Text="{Binding ErrorPasswordMessage, UpdateSourceTrigger=PropertyChanged}"
                 Foreground="#D7596D"
                 FontSize="12"
@@ -133,11 +136,11 @@
 
             <Button Style="{DynamicResource customButtonOrange}" Width="100" 
                 Content="{DynamicResource ResourceKey=register_button}"
-                Command="{Binding RegisterCommand}"
+                Command="{Binding RegisterCommand}"  Foreground="Black"
                 CommandParameter="{Binding ElementName=view}"/>
 
             <Button Style="{DynamicResource customButton}" Margin="5"
-                Content="{DynamicResource ResourceKey=login}"
+                Content="{DynamicResource ResourceKey=login}" Foreground="Black"
                 Click="NavigateLoginView"/>
         </StackPanel>
         </StackPanel>

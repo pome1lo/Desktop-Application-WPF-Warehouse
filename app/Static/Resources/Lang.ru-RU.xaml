@@ -37,5 +37,10 @@
     <v:String x:Key="option4">Электрика</v:String>  
     <v:String x:Key="change">Изменить</v:String>  
     <v:String x:Key="delete">Удалить</v:String>
-    <v:String x:Key="isadmin">Является ли админом</v:String>  
+    <v:String x:Key="isadmin">Является ли админом</v:String>
+    <v:String x:Key="Basket_Checkout">Заказать</v:String>
+    <v:String x:Key="total">Итого: </v:String>
+    <v:String x:Key="order_num">Заказ №</v:String>  
+    <v:String x:Key="order_date">Дата заказа</v:String>
+    <v:String x:Key="quanity">Количество: </v:String>  
 </ResourceDictionary>

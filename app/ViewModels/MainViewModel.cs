@@ -1,10 +1,8 @@
-﻿
-using app.Commands;
+﻿using app.Commands;
 using app.Database;
 using app.Views.Pages;
 using app.Views.Windows;
 using System;
-using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -21,7 +19,7 @@ namespace app.ViewModels
             ChangeTheme(CurrentUser.Theme);
             ChangeLanguage(CurrentUser.Language);
             ConfiguringApplicationForUserType();
-            ShowPage(new HomeView());
+            ShowPage(new MenuView());
         }
 
         private Visibility visibilityAdminButton = Visibility.Collapsed;
@@ -30,9 +28,10 @@ namespace app.ViewModels
         private UnitOfWork Db;
         private MainView? view;
 
+        private ImageSource currentLogoThemeImage = new BitmapImage(new Uri("\\Static\\Img\\LightLogo.png", UriKind.Relative));
         private ImageSource currentThemeImage = new BitmapImage(new Uri("\\Static\\Img\\ThemeLight.png", UriKind.Relative));
         private ImageSource currentLangImage = new BitmapImage(new Uri("\\Static\\Img\\rus.png", UriKind.Relative));
-
+         
         private DelegateCommand? showMenuCommand;
         private DelegateCommand<object> exitAccountCommand;
         private DelegateCommand? exitCommand;
@@ -45,6 +44,8 @@ namespace app.ViewModels
         private DelegateCommand? showHomeCommand;
         private DelegateCommand toggleImageThemeCommand;
         private Brush colorHeaderButton;
+
+        #region Property
 
         public Visibility VisibilityAdminButton
         {
@@ -79,6 +80,16 @@ namespace app.ViewModels
             }
         }
 
+        public ImageSource CurrentLogoThemeImage
+        {
+            get => currentLogoThemeImage;
+            set
+            {
+                currentLogoThemeImage = value;
+                OnPropertyChanged(nameof(CurrentLogoThemeImage));
+            }
+        }
+
         public ImageSource CurrentLangImage
         {
             get => currentLangImage;
@@ -89,6 +100,10 @@ namespace app.ViewModels
             }
         }
 
+        #endregion
+
+        #region Methods
+
         private void ConfiguringApplicationForUserType()
         {
             if (CurrentUser.IsAdmin)
@@ -96,7 +111,7 @@ namespace app.ViewModels
                 SettingUpForAdmin();
             }
         }
-        
+
         private void SettingUpForAdmin()
         {
             VisibilityAdminButton = Visibility.Visible;
@@ -117,6 +132,7 @@ namespace app.ViewModels
             Db.Save();
         }
 
+
         private void ChangeTheme(string Theme)
         {
             System.Windows.Application.Current.Resources.MergedDictionaries.Add(
@@ -127,11 +143,15 @@ namespace app.ViewModels
                         UriKind.Relative
                     )
                 }
-            ); 
-            CurrentUser.Theme = Theme; 
+            );
+            CurrentUser.Theme = Theme;
             ColorHeaderButton = (Theme == "Dark") ? Brushes.White : Brushes.Black;
             Db.Save();
         }
+
+        #endregion
+
+        #region Commands
 
         public ICommand ExitAccountCommand
         {
@@ -184,7 +204,7 @@ namespace app.ViewModels
             {
                 if (showHomeCommand == null)
                 {
-                    showHomeCommand= new DelegateCommand(() =>
+                    showHomeCommand = new DelegateCommand(() =>
                     {
                         ShowPage(new HomeView());
                     });
@@ -237,6 +257,7 @@ namespace app.ViewModels
                 return showProfileCommand;
             }
         }
+        private bool isDarkTheme = false; // По умолчанию стартовая тема - светлая
 
         public ICommand ToggleImageThemeCommand
         {
@@ -248,12 +269,14 @@ namespace app.ViewModels
                     {
                         if (isThemeFirstImage)
                         {
+                            CurrentLogoThemeImage = new BitmapImage(new Uri("\\Static\\Img\\DarkLogo.png", UriKind.Relative));
                             CurrentThemeImage = new BitmapImage(new Uri("\\Static\\Img\\ThemeDark.png", UriKind.Relative));
                             new Task(() => { ChangeTheme("Dark"); }).Start();
                             isThemeFirstImage = false;
                         }
                         else
                         {
+                            CurrentLogoThemeImage = new BitmapImage(new Uri("\\Static\\Img\\LightLogo.png", UriKind.Relative));
                             CurrentThemeImage = new BitmapImage(new Uri("\\Static\\Img\\ThemeLight.png", UriKind.Relative));
                             new Task(() => { ChangeTheme("Light"); }).Start();
                             isThemeFirstImage = true;
@@ -290,5 +313,6 @@ namespace app.ViewModels
                 return toggleImageLangCommand;
             }
         } 
+        #endregion
     }
 }

@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         Title="ModalWindow" Height="180" Width="320">
-    <Border Padding="30 10 0 00" CornerRadius="15" BorderThickness="2" BorderBrush="Black">
+    <Border Padding="30 10 0 00" BorderBrush="Black" BorderThickness="1">
         <StackPanel>
             <Grid HorizontalAlignment="Right" Width="100">
                 <Grid.ColumnDefinitions>

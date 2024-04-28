@@ -1,14 +1,11 @@
 ﻿using app.Commands;
 using app.Database;
 using app.Models;
+using app.Views.Windows;
 using DataValidation;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using static DataValidation.Validator;
@@ -25,8 +22,8 @@ namespace app.ViewModels
             Products = Db.Products.GetIEnumerable().ToList();
             VisibilityEditProductButton = CurrentUser.IsAdmin ? Visibility.Visible : Visibility.Collapsed;
         }
-         
-        private List<string> selectedCategories; 
+
+        private List<string> selectedCategories;
         private UnitOfWork Db;
         private List<Product>? products;
         private Product? selectedItemForListProducts;
@@ -44,11 +41,11 @@ namespace app.ViewModels
 
         private DelegateCommand? findButtonCommand;
         private DelegateCommand? resetButtonCommand;
-        private DelegateCommand<object>? addToBasketCommand;
+        private DelegateCommand<Product>? addToBasketCommand;
         private DelegateCommand<object>? checkBoxCommand;
         private DelegateCommand<Product>? editProductCommand;
 
-        #region Main List Product
+        #region Property
 
         public List<Product>? Products
         {
@@ -59,8 +56,6 @@ namespace app.ViewModels
                 OnPropertyChanged(nameof(Products));
             }
         }
-
-        #endregion
 
         #region ToggleButtons
 
@@ -112,12 +107,10 @@ namespace app.ViewModels
             get => visibilityEditProductButton;
             set
             {
-                visibilityEditProductButton = value; 
+                visibilityEditProductButton = value;
                 OnPropertyChanged(nameof(VisibilityEditProductButton));
             }
         }
- 
-        #region Search
 
         public string SearchString
         {
@@ -129,10 +122,6 @@ namespace app.ViewModels
                 OnPropertyChanged(nameof(SearchString));
             }
         }
-
-        #endregion
-
-        #region From/To
 
         public string RangeFrom
         {
@@ -156,7 +145,29 @@ namespace app.ViewModels
             }
         }
 
+
+        public int SliderValue
+        {
+            get => sliderValue;
+            set
+            {
+                sliderValue = value;
+                OnPropertyChanged(nameof(SliderValue));
+            }
+        }
+
+        public Product? SelectedItemForListProducts
+        {
+            get => null;
+            set
+            {
+                ShowProductInfoPage(value);
+                OnPropertyChanged(nameof(SelectedItemForListProducts));
+            }
+        }
+
         #endregion
+
         #region Errors
 
 
@@ -180,34 +191,6 @@ namespace app.ViewModels
             }
         }
 
-
-        #endregion
-
-        #region SliderValue
-
-        public int SliderValue
-        {
-            get => sliderValue;
-            set
-            {
-                sliderValue = value;
-                OnPropertyChanged(nameof(SliderValue));
-            }
-        }
-
-        #endregion
-
-        #region Selected Item For List Products
-
-        public Product? SelectedItemForListProducts
-        {
-            get => null;
-            set
-            {
-                ShowProductInfoPage(value);
-                OnPropertyChanged(nameof(SelectedItemForListProducts));
-            }
-        }
 
         #endregion
 
@@ -278,7 +261,7 @@ namespace app.ViewModels
 
         #endregion
 
-        #region Add product from bascket
+        #region Commands
 
         public ICommand AddToBasketCommand
         {
@@ -286,50 +269,45 @@ namespace app.ViewModels
             {
                 if (addToBasketCommand == null)
                 {
-                    addToBasketCommand = new DelegateCommand<object>((object obj) =>
+                    addToBasketCommand = new DelegateCommand<Product>((Product product) =>
                     {
-                        Product? product = obj as Product;
-                        if (CurrentUser.ProductsFromBasket.Any(x => x.Product.Id == product.Id))
+                        using var db = new ApplicationContext();
+
+                        if (db.ProductsFromBasket.Any(x => x.UserId == CurrentUser.Id))
                         {
-                            if (CurrentUser.ProductsFromBasket.First(x => x.Product.Id == product?.Id).Quantity + 1 < 10)
+                            if (db.ProductsFromBasket.Where(x => x.UserId == CurrentUser.Id).First().Quantity + 1 < 10)
                             {
-                                SendToModalWindow("The product has been successfully added to the cart");
-                                CurrentUser.ProductsFromBasket.First(x => x.Product.Id == product?.Id).Quantity += 1;
-                                Db.Users.Update(CurrentUser);
-                                Db.Save();
+                                var prod = db.ProductsFromBasket.Where(x => x.UserId == CurrentUser.Id).First();
+                                prod.Quantity += 1;
+                                db.ProductsFromBasket.Update(prod);
+                                db.SaveChanges();
+                                SendToModalWindow("Товар успешно добавлен в корзину");
                             }
                             else
                             {
-                                SendToModalWindow("Exceeded the number of units of the product");
+                                SendToModalWindow("Превышено количество единиц товара");
                             }
                         }
                         else
                         {
-                            if (CurrentUser.ProductsFromBasket.Count() < 5)
+                            var prod = new ProductFromBasket()
                             {
-                                SendToModalWindow("The product has been successfully added to the cart");
-                                CurrentUser.ProductsFromBasket.Add(new ProductFromBasket()
-                                {
-                                    Product = product,
-                                    Quantity = 1
-                                });
-                                Db.Users.Update(CurrentUser);
-                                Db.Save();
-                            }
+                                Product = db.Products.First(x => x.Id == product.Id),
+                                Quantity = 1,
+                                UserId = CurrentUser.Id
+                            };
+                            db.ProductsFromBasket.Add(prod);
+                            db.Users.Update(CurrentUser);
+                            db.SaveChanges();
+                            SendToModalWindow("Товар успешно добавлен в корзину");
                         }
-                        var db = new ApplicationContext();
                         db.Users.Update(CurrentUser);
                         db.SaveChanges();
-                        Db.Save();
                     });
                 }
                 return addToBasketCommand;
             }
         }
-
-        #endregion
-
-        #region Reset
 
         public ICommand ResetButtonCommand
         {
@@ -358,10 +336,6 @@ namespace app.ViewModels
             }
         }
 
-        #endregion
-
-        #region Search product
-
         public ICommand FindButtonCommand
         {
             get
@@ -378,8 +352,6 @@ namespace app.ViewModels
             }
         }
 
-        #endregion
-         
         public ICommand CheckBoxCommand
         {
             get
@@ -399,13 +371,13 @@ namespace app.ViewModels
                                 selectedCategories.Add(category);
                             }
                             FilterProducts();
-                        } 
+                        }
                     });
                 }
                 return checkBoxCommand;
             }
         }
-          
+
         public ICommand EditProductCommand
         {
             get
@@ -414,12 +386,17 @@ namespace app.ViewModels
                 {
                     editProductCommand = new DelegateCommand<Product>((Product product) =>
                     {
-                        MessageBox.Show(product.ProductName);
+                        var view = new ChangeProductView();
+                        var viewModel = new ChangeProductViewModel(product);
+                        view.DataContext = viewModel;
+                        view.ShowDialog();
+                        Products = Db.Products.GetIEnumerable().ToList();
                     });
                 }
                 return editProductCommand;
             }
         }
-          
+
+        #endregion
     }
 }

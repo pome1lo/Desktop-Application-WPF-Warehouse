@@ -73,6 +73,11 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <StackPanel>
+                <Button Content="{DynamicResource add_product}" Width="150"
+                        Style="{DynamicResource customButtonOrange}"
+                        Command="{Binding AddNewProduct}"/>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </Page>

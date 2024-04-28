@@ -25,10 +25,6 @@ namespace app.Database.Repositories.MSSQL
 
         public IEnumerable<Product> GetIEnumerable()
         {
-            //IEnumerable<Product> products = db.Products;
-
-            //products.ToList().ForEach(x => x.Description = db.Descriptions.ToArray()[x.Id - 1]);
-
             return db.Products.Include(x => x.Category);
         }
 
@@ -44,7 +40,6 @@ namespace app.Database.Repositories.MSSQL
 
         public void Create(Product product)
         {
-            //product.Id = db.Products.Last().Id + 1;
             db.Products.Add(product);
         }
 

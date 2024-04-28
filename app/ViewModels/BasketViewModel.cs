@@ -1,56 +1,42 @@
 ﻿using app.Commands;
 using app.Database;
-using app.Database.Repositories.MSSQL;
 using app.Models;
+using app.Views.Pages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace app.ViewModels
 {
     internal class BasketViewModel : ViewModelBase
     {
-
-        #region Constructor
-
         public BasketViewModel()
         {
             this.Db = new UnitOfWork();
-            ProductsFromBasket = CurrentUser.ProductsFromBasket;
+            ProductsFromBasket = Db.ProductsFromBascket.GetIEnumerable().ToList();
         }
 
-        #endregion
-        
         private UnitOfWork Db;
+        private List<ProductFromBasket> productsFromBasket;
 
         private string prodNameFroItemCard;
-        private DelegateCommand? findButtonCommand;
-        private DelegateCommand? resetButtonCommand;
         private DelegateCommand<ProductFromBasket>? plusItemCardCommand;
         private DelegateCommand<ProductFromBasket>? minusItemCardCommand;
-        private DelegateCommand<ProductFromBasket>? closeItemCardCommand;
-        private DelegateCommand<object>? addToBasketCommand;
         private DelegateCommand? placeAnOrderCommand;
 
-
-        #region List Product From Basket
+        #region Property
 
         public List<ProductFromBasket> ProductsFromBasket
         {
-            get => CurrentUser.ProductsFromBasket;
+            get => productsFromBasket;
             set
             {
-                CurrentUser.ProductsFromBasket = value;
+                productsFromBasket = value;
                 OnPropertyChanged(nameof(ProductsFromBasket));
             }
         }
-
-        #endregion
-
-        #region Selected Item For List Products
 
         public Product? SelectedItemForListProducts
         {
@@ -62,9 +48,6 @@ namespace app.ViewModels
             }
         }
 
-        #endregion
-        #region Selected item name for basket list products
-
         public string ProdNameFroItemCard
         {
             get => prodNameFroItemCard;
@@ -75,11 +58,18 @@ namespace app.ViewModels
             }
         }
 
+        public decimal Total
+        {
+            get => ProductsFromBasket.Sum(x => x.Product.Price * x.Quantity);
+            set
+            {
+                OnPropertyChanged(nameof(Total));
+            }
+        }
+
         #endregion
 
         #region Command
-
-        #region Buttons for item card 
 
         public ICommand PlusItemCardCommand
         {
@@ -92,8 +82,12 @@ namespace app.ViewModels
                         if (prod.Quantity + 1 < 10)
                         {
                             prod.Quantity++;
-                            Db.Save();
-                            ProductsFromBasket = new(CurrentUser.ProductsFromBasket);
+
+                            var db = new ApplicationContext();
+                            db.ProductsFromBasket.Update(prod);
+                            db.SaveChanges();
+                            ProductsFromBasket = new(db.ProductsFromBasket.Where(x => x.Id == CurrentUser.Id));
+                            ShowPage(new BasketView());
                         }
                     });
                 }
@@ -111,45 +105,28 @@ namespace app.ViewModels
                     {
                         if (prod != null)
                         {
+                            var db = new ApplicationContext();
                             if (prod.Quantity == 1)
                             {
-                                Db.ProductsFromBascket.Delete(prod.Id);
-                                Db.Save();
-                                ProductsFromBasket = new(CurrentUser.ProductsFromBasket);
+                                db.ProductsFromBasket.Remove(prod);
+                                db.SaveChanges();
+                                ProductsFromBasket = new(db.ProductsFromBasket.Where(x => x.Id == CurrentUser.Id));
                             }
                             else
                             {
+                                db.ProductsFromBasket.Update(prod);
                                 prod.Quantity--;
+                                db.SaveChanges();
                             }
-                            Db.Save();
-                            ProductsFromBasket = new(CurrentUser.ProductsFromBasket);
+                            db.SaveChanges();
+                            ProductsFromBasket = new(db.ProductsFromBasket.Where(x => x.Id == CurrentUser.Id));
+                            ShowPage(new BasketView());
                         }
                     });
                 }
                 return minusItemCardCommand; ;
             }
         }
-
-
-        public ICommand CloseItemCardCommand
-        {
-            get
-            {
-                if (closeItemCardCommand == null)
-                {
-                    closeItemCardCommand = new DelegateCommand<ProductFromBasket>((ProductFromBasket prod) =>
-                    {
-                        Db.ProductsFromBascket.Delete(prod.Id);
-                        Db.Save();
-                        ProductsFromBasket = new(CurrentUser.ProductsFromBasket);
-                    });
-                }
-                return closeItemCardCommand;
-            }
-        }
-
-        #endregion
-        #region Place an order 
 
         public ICommand PlaceAnOrderCommand
         {
@@ -159,13 +136,38 @@ namespace app.ViewModels
                 {
                     placeAnOrderCommand = new DelegateCommand(() =>
                     {
-                        if (CurrentUser.ProductsFromBasket.Count() > 0)
+                        using var db = new ApplicationContext();
+                        var listProducts = db.ProductsFromBasket.Include(x => x.Product).Where(x => x.UserId == CurrentUser.Id);
+                        if (listProducts.Count() > 0)
                         {
-                            SendToModalWindow("✅✅✅");
+                            var listOrederProducts = new List<ProductFromOrder>();
+                            foreach (var product in listProducts)
+                            {
+                                listOrederProducts.Add(new ProductFromOrder()
+                                {
+                                    Price = product.Product.Price,
+                                    Image = product.Product.Image,
+                                    ProductName = product.Product.ProductName
+                                });
+                            }
+                            var order = new Order()
+                            {
+                                Total = Total,
+                                User = db.Users.FirstOrDefault(x => x.Id == CurrentUser.Id),
+                                Date = DateTime.Now,
+                                Products = listOrederProducts
+                            };
+
+                            db.Orders.Add(order);
+                            db.ProductsFromBasket.RemoveRange(listProducts);
+                            db.SaveChanges();
+                            ProductsFromBasket = db.ProductsFromBasket.Where(x => x.UserId == CurrentUser.Id).ToList();
+                            SendToModalWindow("Заказ успешно оформлен");
+                            ShowPage(new MenuView());
                         }
                         else
                         {
-                            SendToModalWindow("First fill out the shopping cart");
+                            SendToModalWindow("Сначала добавьте товары в корзину");
                         }
                     });
                 }
@@ -173,7 +175,6 @@ namespace app.ViewModels
             }
         }
 
-        #endregion
         #endregion
     }
 }

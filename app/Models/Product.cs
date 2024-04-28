@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace app.Models
 {
     public class Product
     {
-        public int Id { get; set; } = default;
+        [Key] public int Id { get; set; } = default;
         public string ProductName { get; set; } = string.Empty;
         public string Desciption { get; set; } = string.Empty;
         public Category Category { get; set; } = null!;
