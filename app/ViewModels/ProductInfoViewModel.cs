@@ -50,15 +50,15 @@ namespace app.ViewModels
                     addToBasketCommand = new DelegateCommand(() =>
                     { 
                         using var db = new ApplicationContext();
-                        if (db.ProductsFromBasket.Any(x => x.Product.Id == product.Product.Id))
+                        if (db.ProductsFromBasket.Include(x => x.Product).Any(x => x.Product.Id == product.Id))
                         {
-                            if (db.ProductsFromBasket.Where(x => x.UserId == CurrentUser.Id).First().Quantity + 1 < 10)
+                            var prod = db.ProductsFromBasket.FirstOrDefault(x => x.UserId == CurrentUser.Id);
+                            if (prod.Quantity + 1 < 10)
                             {
-                                SendToModalWindow("Товар успешно добавлен в корзину");
-                                var prod = db.ProductsFromBasket.Where(x => x.UserId == CurrentUser.Id).First();
                                 prod.Quantity += 1;
                                 db.ProductsFromBasket.Update(prod);
                                 db.SaveChanges();
+                                SendToModalWindow("Товар успешно добавлен в корзину");
                             }
                             else
                             {
@@ -69,7 +69,7 @@ namespace app.ViewModels
                         {
                             var prod = new ProductFromBasket()
                             {
-                                Product = db.Products.First(x => x.Id == product.Id),
+                                Product = db.Products.First(x => x.Id == product.Product.Id),
                                 Quantity = 1,
                                 UserId = CurrentUser.Id
                             };
@@ -79,8 +79,7 @@ namespace app.ViewModels
                             SendToModalWindow("Товар успешно добавлен в корзину");
                         }
                         db.Users.Update(CurrentUser);
-                        db.SaveChanges();
-                        Db.Save();
+                        db.SaveChanges(); 
                     });
                 }
                 return addToBasketCommand;

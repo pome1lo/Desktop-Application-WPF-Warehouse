@@ -21,7 +21,7 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="{DynamicResource Basket_Order}" FontSize="20" FontWeight="DemiBold" HorizontalAlignment="Center"/>
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" Height="250">
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" Height="300">
 
                     <ListView ItemsSource="{Binding ProductsFromBasket, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                           Background="Transparent" BorderThickness="0">

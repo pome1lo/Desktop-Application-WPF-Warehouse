@@ -3,6 +3,7 @@ using app.Database;
 using app.Models;
 using app.Views.Windows;
 using DataValidation;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -270,14 +271,14 @@ namespace app.ViewModels
                 if (addToBasketCommand == null)
                 {
                     addToBasketCommand = new DelegateCommand<Product>((Product product) =>
-                    {
+                    { 
                         using var db = new ApplicationContext();
 
-                        if (db.ProductsFromBasket.Any(x => x.UserId == CurrentUser.Id))
+                        if (db.ProductsFromBasket.Include(x => x.Product).Any(x => x.Product.Id == product.Id))
                         {
-                            if (db.ProductsFromBasket.Where(x => x.UserId == CurrentUser.Id).First().Quantity + 1 < 10)
+                            var prod = db.ProductsFromBasket.FirstOrDefault(x => x.UserId == CurrentUser.Id);
+                            if (prod.Quantity + 1 < 10)
                             {
-                                var prod = db.ProductsFromBasket.Where(x => x.UserId == CurrentUser.Id).First();
                                 prod.Quantity += 1;
                                 db.ProductsFromBasket.Update(prod);
                                 db.SaveChanges();

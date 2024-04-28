@@ -43,4 +43,6 @@
     <v:String x:Key="order_num">Order No.</v:String>
     <v:String x:Key="order_date">Order Date</v:String>
     <v:String x:Key="quanity">Quantity:</v:String>
+    <v:String x:Key="statistics">Statistics</v:String>
+    <v:String x:Key="NumberOfItemsSold">Number of items sold</v:String>
 </ResourceDictionary>

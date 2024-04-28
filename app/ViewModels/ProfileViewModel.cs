@@ -1,6 +1,7 @@
 ﻿using app.Commands;
 using app.Database;
 using app.Models;
+using app.Views.Pages;
 using app.Views.Windows;
 using DataEncryption;
 using DataValidation;
@@ -171,14 +172,17 @@ namespace app.ViewModels
                     editNewUserCommand = new DelegateCommand<ChangeUserView>((ChangeUserView view) =>
                     {
                         if (NewUserValidate())
-                        {
-                            user.Password = CryptographerBuilder.Encrypt(user.Password);
+                        { 
                             var db = new ApplicationContext();
-                            db.Users.Update(user);
+                            CurrentUser.Email = user.Email;
+                            CurrentUser.Password = user.Password;
+                            CurrentUser.Username = user.Username;
+                            CurrentUser.FIO = user.FIO;
+                            db.Users.Update(CurrentUser);
                             db.SaveChanges();
 
                             SendToModalWindow("Данные успешно изменены.");
-                            view.Close();
+                            ShowPage(new MenuView());
                         }
                     });
                 }

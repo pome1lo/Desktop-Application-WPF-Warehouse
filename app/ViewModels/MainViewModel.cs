@@ -38,6 +38,7 @@ namespace app.ViewModels
         private DelegateCommand? showAdminCommand;
         private DelegateCommand? showProfileCommand;
         private DelegateCommand? showMapCommand;
+        private DelegateCommand? showStatisticsPage;
         private DelegateCommand? showBasketCommand;
         private DelegateCommand? showAboutCommand;
         private DelegateCommand toggleImageLangCommand;
@@ -206,13 +207,28 @@ namespace app.ViewModels
                 {
                     showHomeCommand = new DelegateCommand(() =>
                     {
-                        ShowPage(new HomeView());
+                        ShowPage(new MenuView());
                     });
                 }
                 return showHomeCommand;
             }
         }
 
+        public ICommand ShowStatisticsPage
+        {
+            get
+            {
+                if (showStatisticsPage == null)
+                {
+                    showStatisticsPage = new DelegateCommand(() =>
+                    {
+                        ShowPage(new StatisticsView());
+                    });
+                }
+                return showStatisticsPage;
+            }
+        }
+        
         public ICommand ShowMenuCommand
         {
             get

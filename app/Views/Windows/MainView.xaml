@@ -37,7 +37,12 @@
                         </Button.Template>
                     </Button>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-
+                        <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
+                            <Button Command="{Binding ShowStatisticsPage}" Content="📊" 
+                                    Visibility="{Binding VisibilityAdminButton}"
+                                    Style="{DynamicResource customButtonHeader}" 
+                                    Foreground="{Binding ColorHeaderButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        </Border>
                         <Border Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
                             <Button Command="{Binding ShowAdminCommand}" Content="⚙️" 
                                     Visibility="{Binding VisibilityAdminButton}"

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace app.Views.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для HomeView.xaml
+    /// Логика взаимодействия для StatisticsView.xaml
     /// </summary>
-    public partial class HomeView : Page
+    public partial class StatisticsView : Page
     {
-        public HomeView()
+        public StatisticsView()
         {
             InitializeComponent();
         }

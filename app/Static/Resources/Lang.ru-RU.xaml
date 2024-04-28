@@ -42,5 +42,7 @@
     <v:String x:Key="total">Итого: </v:String>
     <v:String x:Key="order_num">Заказ №</v:String>  
     <v:String x:Key="order_date">Дата заказа</v:String>
-    <v:String x:Key="quanity">Количество: </v:String>  
+    <v:String x:Key="quanity">Количество: </v:String>
+    <v:String x:Key="statistics">Статистика</v:String>
+    <v:String x:Key="NumberOfItemsSold">Количество проданных товаров</v:String>  
 </ResourceDictionary>

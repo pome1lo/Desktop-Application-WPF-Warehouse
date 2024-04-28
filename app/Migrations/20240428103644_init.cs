@@ -25,6 +25,22 @@ namespace app.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StatisticalData",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumberOfItemsSold = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StatisticalData", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -158,6 +174,9 @@ namespace app.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductsFromOrder");
+
+            migrationBuilder.DropTable(
+                name: "StatisticalData");
 
             migrationBuilder.DropTable(
                 name: "Products");

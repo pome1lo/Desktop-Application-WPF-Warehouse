@@ -12,6 +12,7 @@ namespace app.Database
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<ProductFromBasket> ProductsFromBasket { get; set; } = null!;
         public DbSet<ProductFromOrder> ProductsFromOrder { get; set; } = null!;
+        public DbSet<Statistics> StatisticalData { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,6 +26,7 @@ namespace app.Database
             modelBuilder.Entity<ProductFromBasket>().Property(u => u.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Order>().Property(u => u.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Category>().Property(u => u.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Statistics>().Property(u => u.Id).ValueGeneratedOnAdd();
             base.OnModelCreating(modelBuilder);
         } 
     }

@@ -13,6 +13,7 @@ namespace app.Database
 
         private UserRepository? userRepository;
         private ProductRepository? productRepository;
+        private StatisticsRepository? statisticalData;
         private CategoriesRepository? categoryRepository;
         private ProductFromBascketRepository? productFromBascketRepository;
 
@@ -36,6 +37,18 @@ namespace app.Database
                     productRepository = new ProductRepository(this.db);
                 }
                 return productRepository;
+            }
+        }
+        
+        public StatisticsRepository StatisticalData
+        {
+            get
+            {
+                if (statisticalData == null)
+                {
+                    statisticalData = new StatisticsRepository(this.db);
+                }
+                return statisticalData;
             }
         }
         

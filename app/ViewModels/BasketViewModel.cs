@@ -15,7 +15,7 @@ namespace app.ViewModels
         public BasketViewModel()
         {
             this.Db = new UnitOfWork();
-            ProductsFromBasket = Db.ProductsFromBascket.GetIEnumerable().ToList();
+            ProductsFromBasket = Db.ProductsFromBascket.GetIEnumerable().Where(x => x.UserId == CurrentUser.Id).ToList();
         }
 
         private UnitOfWork Db;
@@ -158,6 +158,26 @@ namespace app.ViewModels
                                 Products = listOrederProducts
                             };
 
+
+
+                            var existingStatistics = db.StatisticalData.FirstOrDefault(s => s.Email == order.User.Email);
+
+                            if (existingStatistics != null)
+                            {
+                                existingStatistics.NumberOfItemsSold += order.Products.Count();
+                            }
+                            else
+                            {
+                                var statistics = new Statistics()
+                                {
+                                    Total = order.Total,
+                                    Username = order.User.Username,
+                                    Email = order.User.Email,
+                                    NumberOfItemsSold = order.Products.Count()
+                                };
+
+                                db.StatisticalData.Add(statistics);
+                            } 
                             db.Orders.Add(order);
                             db.ProductsFromBasket.RemoveRange(listProducts);
                             db.SaveChanges();
